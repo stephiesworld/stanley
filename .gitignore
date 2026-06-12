@@ -1,5 +1,4 @@
 __pycache__/
 *.pyc
-transcripts/
 .env
 .env.local
