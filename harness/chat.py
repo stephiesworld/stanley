@@ -91,7 +91,8 @@ def main() -> None:
 
     now = resolve_now(args.date)
     date_line = format_date(now)
-    system_prompt = read_file("system_prompt.md")
+    # The soul file lives at the repo root — single source shared with the app.
+    system_prompt = (HERE.parent / "system_prompt.md").read_text(encoding="utf-8").strip()
     profile = read_file(args.profile)
     calendar = read_file(args.calendar)
 
