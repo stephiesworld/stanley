@@ -74,6 +74,11 @@ def main() -> None:
         default="calendar.md",
         help="Calendar file to load (default: calendar.md). Lets probes run against seeded variants.",
     )
+    parser.add_argument(
+        "--profile",
+        default="profile.md",
+        help="Profile file to load (default: profile.md). Lets probes run against seeded variants.",
+    )
     args = parser.parse_args()
 
     api_key = os.environ.get("ANTHROPIC_API_KEY")
@@ -87,7 +92,7 @@ def main() -> None:
     now = resolve_now(args.date)
     date_line = format_date(now)
     system_prompt = read_file("system_prompt.md")
-    profile = read_file("profile.md")
+    profile = read_file(args.profile)
     calendar = read_file(args.calendar)
 
     client = anthropic.Anthropic(api_key=api_key)
@@ -118,6 +123,8 @@ def main() -> None:
         log(f"- (via `--date \"{args.date}\"`)\n")
     if args.calendar != "calendar.md":
         log(f"- Calendar: `{args.calendar}`\n")
+    if args.profile != "profile.md":
+        log(f"- Profile: `{args.profile}`\n")
     log(f"- Model: `{MODEL}`, max_tokens {MAX_TOKENS}\n\n---\n\n")
 
     print(f"Stanley is here. It is {date_line}.")
