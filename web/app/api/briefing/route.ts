@@ -11,6 +11,11 @@ import { addDays, dayKey } from "@/lib/briefing/time";
 
 const WINDOW_DAYS = 14;
 
+interface Turn {
+  role: "user" | "assistant";
+  content: string;
+}
+
 function loadProfile(): string {
   // v1: profile ships as a file; becomes the user-editable Layer 1 later.
   return fs.readFileSync(path.join(process.cwd(), "prompts", "profile.md"), "utf-8");
@@ -21,6 +26,19 @@ export async function POST(req: NextRequest) {
   const userMessage: string = body.message ?? "Morning briefing";
   // simulate any date in dev, same as the harness --date flag
   const now = body.date ? new Date(body.date) : new Date();
+  // prior turns; history[0].content is the assembled context from turn one,
+  // so the calendar/profile/date grounding is sent exactly once per thread
+  const history: Turn[] = Array.isArray(body.history) ? body.history : [];
+
+  // Follow-up turn: no reassembly, just continue the conversation.
+  if (history.length > 0) {
+    try {
+      const briefing = await askStanley(userMessage, history);
+      return NextResponse.json({ briefing, source: "(thread)", context: userMessage });
+    } catch (e) {
+      return NextResponse.json({ error: (e as Error).message }, { status: 500 });
+    }
+  }
 
   let source = "mock";
   let raw = MOCK_EVENTS;

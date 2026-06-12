@@ -37,11 +37,100 @@ h1 {
   margin-bottom: 40px;
 }
 
-.actions {
+.setup {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   gap: 24px;
-  margin-bottom: 36px;
+  margin-bottom: 20px;
+}
+
+.setup label {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.hint {
+  font-size: 0.78rem;
+  font-style: italic;
+}
+
+.setup input[type="datetime-local"] {
+  font-family: inherit;
+  font-size: 0.95rem;
+  padding: 6px 10px;
+  border: 1px solid #ddd2bf;
+  border-radius: 2px;
+  background: #fffdf8;
+  color: var(--ink);
+}
+
+.quick {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink-soft);
+}
+
+button.ghost.reset {
+  border-style: dashed;
+  color: var(--ink-soft);
+}
+
+.thread {
+  border-top: 1px solid #ddd2bf;
+  padding-top: 8px;
+  margin-bottom: 24px;
+}
+
+.turn {
+  padding: 16px 0;
+  line-height: 1.65;
+}
+
+.turn .who {
+  display: block;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin-bottom: 6px;
+}
+
+.turn.user p {
+  color: var(--ink-soft);
+}
+
+.turn p + p {
+  margin-top: 12px;
+}
+
+.thinking {
+  letter-spacing: 0.2em;
+}
+
+.composer {
+  display: flex;
+  gap: 12px;
+}
+
+.composer input {
+  flex: 1;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 14px;
+  border: 1px solid #ddd2bf;
+  border-radius: 2px;
+  background: #fffdf8;
+  color: var(--ink);
 }
 
 button {
@@ -68,16 +157,6 @@ button:disabled {
 .error {
   color: #8b1e2f;
   margin-bottom: 24px;
-}
-
-.briefing {
-  border-top: 1px solid #ddd2bf;
-  padding-top: 28px;
-  line-height: 1.65;
-}
-
-.briefing p {
-  margin-bottom: 16px;
 }
 
 .source {
