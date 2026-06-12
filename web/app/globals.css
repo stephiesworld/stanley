@@ -1,0 +1,87 @@
+:root {
+  --cream: #f7f2e9;
+  --ink: #2b2620;
+  --ink-soft: #6b6256;
+  --accent: #8b6f47;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.stanley {
+  max-width: 620px;
+  margin: 0 auto;
+  padding: 12vh 24px 80px;
+}
+
+h1 {
+  font-size: 2.4rem;
+  font-weight: 400;
+  letter-spacing: 0.02em;
+}
+
+.tagline {
+  color: var(--ink-soft);
+  font-style: italic;
+  margin-top: 6px;
+  margin-bottom: 40px;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 36px;
+}
+
+button {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  font-family: inherit;
+  font-size: 1rem;
+  padding: 10px 22px;
+  border-radius: 2px;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+
+.connect {
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.error {
+  color: #8b1e2f;
+  margin-bottom: 24px;
+}
+
+.briefing {
+  border-top: 1px solid #ddd2bf;
+  padding-top: 28px;
+  line-height: 1.65;
+}
+
+.briefing p {
+  margin-bottom: 16px;
+}
+
+.source {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  font-family: ui-monospace, monospace;
+}
