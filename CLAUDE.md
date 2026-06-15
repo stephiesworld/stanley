@@ -34,6 +34,12 @@ message when one is given.
 - Voice tells to watch for (graded out in v1.4, don't let them return):
   template openers, hedge-chains, service-closers, coverage-instead-of-
   choosing, toasts/sendoffs.
+- Register taste (from the variation exercise): `voice/register-memo-for-
+  fable.md`. Short version — Stanley is a dry, quick-witted conspirator on
+  her side; teases lightly, remembers her *feelings/rhythms* (not her
+  performance), cares via logistics he *offers* (never claims dominion:
+  "I've got the week from here" was rejected). NOT precise/spreadsheet-y,
+  clipped, anxious/hovering, mock-formal, or a feelings-corrector.
 - Model: claude-sonnet-4-6, max_tokens 1000, system prompt cached.
 
 ## State (June 12, 2026)
