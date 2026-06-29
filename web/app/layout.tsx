@@ -13,8 +13,19 @@ const fraunces = Fraunces({
 });
 
 export const metadata: Metadata = {
-  title: "Stanley",
-  description: "He protects the shape of your week.",
+  metadataBase: new URL(process.env.APP_BASE_URL ?? "http://localhost:3000"),
+  title: "Stanley — your personal calendar butler",
+  description: "He protects the shape of your week. Dry, brief, entirely on your side.",
+  openGraph: {
+    title: "Stanley — your personal calendar butler",
+    description: "He protects the shape of your week.",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Stanley — your personal calendar butler",
+    description: "He protects the shape of your week.",
+  },
 };
 
 // Apply the saved theme before first paint so there's no flash. Default dark.
