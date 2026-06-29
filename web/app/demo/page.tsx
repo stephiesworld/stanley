@@ -29,8 +29,8 @@ type Action = Record<string, unknown> | null;
 const SUGGESTIONS = [
   "Morning briefing",
   "What are you guarding this week?",
-  "Move my eyebrow appt to 4pm Friday",
-  "I'm exhausted, clear something Saturday",
+  "Move my dentist cleaning to 2pm",
+  "I'm exhausted — clear something this weekend",
 ];
 
 const dayFmt = new Intl.DateTimeFormat("en-CA", { timeZone: TZ, year: "numeric", month: "2-digit", day: "2-digit" });

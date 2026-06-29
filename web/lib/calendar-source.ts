@@ -32,7 +32,7 @@ export function googleCalendarSource(store: Store, userId: string): CalendarSour
           : null;
       }
       if (a.type === "create") {
-        const id = await createEvent(store, userId, a.title ?? "(untitled)", a.new_start!, a.new_end!, a.location);
+        const id = await createEvent(store, userId, a.title ?? "(untitled)", a.new_start!, a.new_end!, a.location, a.attendees);
         return id ? { type: "delete", event_id: id } : null;
       }
       if (a.type === "delete") {

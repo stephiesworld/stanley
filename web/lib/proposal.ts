@@ -46,6 +46,11 @@ const TOOL: Anthropic.Tool = {
       },
       new_end: { type: "string", description: "ISO 8601 with offset. For move/create." },
       location: { type: "string" },
+      attendees: {
+        type: "array",
+        items: { type: "string" },
+        description: "For create: email addresses the user asked to invite to the event, if any.",
+      },
     },
     required: ["is_proposal"],
   },
@@ -121,6 +126,10 @@ export async function extractProposal(opts: {
   }
   if ((type === "move" || type === "create") && (!input.new_start || !input.new_end)) return null;
 
+  const attendees = Array.isArray(input.attendees)
+    ? (input.attendees as unknown[]).filter((a): a is string => typeof a === "string")
+    : undefined;
+
   return {
     type,
     event_id: input.event_id as string | undefined,
@@ -128,5 +137,6 @@ export async function extractProposal(opts: {
     new_start: input.new_start as string | undefined,
     new_end: input.new_end as string | undefined,
     location: input.location as string | undefined,
+    attendees: attendees && attendees.length ? attendees : undefined,
   };
 }

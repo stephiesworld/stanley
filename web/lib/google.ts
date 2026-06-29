@@ -100,6 +100,8 @@ export async function moveEvent(
 }
 
 // Returns the new event id, so a create can be undone (by deleting it).
+// If attendees are given, Google emails them an invite (sendUpdates: "all") —
+// this only runs inside the confirmation gate, so the user has said yes first.
 export async function createEvent(
   store: Store,
   userId: string,
@@ -107,11 +109,19 @@ export async function createEvent(
   startISO: string,
   endISO: string,
   location?: string,
+  attendees?: string[],
 ): Promise<string | undefined> {
   const calendar = await calendarForUser(store, userId);
   const res = await calendar.events.insert({
     calendarId: "primary",
-    requestBody: { summary, location, start: { dateTime: startISO }, end: { dateTime: endISO } },
+    sendUpdates: attendees && attendees.length ? "all" : "none",
+    requestBody: {
+      summary,
+      location,
+      start: { dateTime: startISO },
+      end: { dateTime: endISO },
+      attendees: attendees?.map((email) => ({ email })),
+    },
   });
   return res.data.id ?? undefined;
 }

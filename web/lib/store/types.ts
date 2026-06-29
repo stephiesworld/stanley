@@ -39,6 +39,7 @@ export interface ProposalAction {
   new_start?: string; // ISO, for move/create
   new_end?: string; // ISO, for move/create
   location?: string;
+  attendees?: string[]; // for create — emails to invite (sends invites on her behalf)
 }
 
 export interface PendingProposal {

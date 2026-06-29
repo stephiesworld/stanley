@@ -37,10 +37,10 @@ describe("mock calendar write (what the demo gate executes)", () => {
     const { mockCalendarSource } = await import("./calendar-source");
     const { MOCK_EVENTS } = await import("./mock-calendar");
     const events = structuredClone(MOCK_EVENTS);
-    const target = events.find((e) => e.summary === "Eyebrow appt")!;
+    const target = events.find((e) => e.summary === "Dentist cleaning")!;
     const cal = mockCalendarSource(() => events, () => {});
 
-    expect(target.start?.dateTime).toContain("14:00");
+    expect(target.start?.dateTime).toContain("11:00");
     await cal.apply({
       type: "move",
       event_id: target.id!,

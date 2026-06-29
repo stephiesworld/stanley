@@ -1,9 +1,11 @@
 import { GoogleEvent } from "./briefing/types";
 
-// Stephie's June 2026 calendar as Google-API-shaped events — the same data
-// the harness validated against, INCLUDING past events (June 10–11) so the
-// today-forward windowing demonstrably drops them.
-// Offsets: America/New_York is -04:00 in June.
+// A relatable sample week for the /demo — a normal working person's calendar
+// (not anyone's private life). Designed to show off what Stanley does: a
+// back-to-back conflict, a trip with travel + recovery, all-day reminders, an
+// evening social, and a big anchor down the line. Simulated "today" is Friday
+// June 12, 2026. Includes a couple of past events so today-forward windowing
+// visibly drops them. Offsets: America/New_York is -04:00 in June.
 const T = (day: string, time: string) => `${day}T${time}:00-04:00`;
 
 function timed(day: string, start: string, end: string, summary: string, location?: string): GoogleEvent {
@@ -15,47 +17,40 @@ function allDay(startDay: string, endDayExclusive: string, summary: string): Goo
 
 export const MOCK_EVENTS: GoogleEvent[] = [
   // — past (must be windowed out) —
-  timed("2026-06-10", "17:00", "18:00", "Tennis match", "Riverside Park Tennis Courts"),
-  timed("2026-06-11", "14:30", "17:00", "Write Mack's MOH speech"),
+  timed("2026-06-10", "18:00", "19:00", "Run club"),
+  timed("2026-06-11", "12:30", "13:30", "Lunch with Dana"),
 
-  // — Friday June 12 —
-  timed("2026-06-12", "11:00", "12:30", "EMDR"),
-  timed("2026-06-12", "13:00", "14:00", "Run to eyebrow appt"),
-  timed("2026-06-12", "14:00", "15:00", "Eyebrow appt"),
-  timed("2026-06-12", "15:00", "16:00", "Perrotin visit"),
-  timed("2026-06-12", "16:00", "17:00", "Transit back"),
-  timed("2026-06-12", "21:00", "23:00", "World Cup viewing"),
+  // — Friday June 12 (today) —
+  timed("2026-06-12", "09:00", "09:30", "Team standup"),
+  timed("2026-06-12", "11:00", "12:00", "Dentist cleaning"),
+  timed("2026-06-12", "13:00", "14:00", "Lunch with Priya", "Cafe Mogador"),
+  timed("2026-06-12", "15:00", "16:00", "Design review"),
+  timed("2026-06-12", "16:00", "17:00", "1:1 with Sam"),
+  timed("2026-06-12", "19:30", "22:00", "Dinner with friends", "Lilia"),
 
   // — Saturday June 13 —
-  allDay("2026-06-13", "2026-06-14", "Gemini card payment due"),
-  timed("2026-06-13", "10:45", "15:45", "Steffeity hang"),
-  timed("2026-06-13", "17:00", "19:00", "Superbueno"),
-  timed("2026-06-13", "19:00", "21:00", "Markette", "326 7th Ave"),
-  timed("2026-06-13", "20:30", "23:00", "NBA Finals Game 5 watch party"),
+  allDay("2026-06-13", "2026-06-14", "Mom's birthday"),
+  timed("2026-06-13", "10:00", "11:00", "Yoga class"),
+  timed("2026-06-13", "13:00", "15:00", "Apartment viewing"),
+  timed("2026-06-13", "19:00", "22:00", "Alex's birthday dinner", "Carbone"),
 
   // — Sunday June 14 —
-  timed("2026-06-14", "17:00", "18:00", "Travel"),
-  timed("2026-06-14", "18:00", "19:00", "Tennis match", "McCarren Park"),
-  timed("2026-06-14", "19:00", "20:00", "Travel"),
-  timed("2026-06-14", "21:00", "23:00", "Pack for France"),
+  timed("2026-06-14", "12:00", "13:30", "Brunch with Mom"),
+  timed("2026-06-14", "20:00", "21:00", "Pack for Chicago"),
 
-  // — Monday June 15 + France —
-  timed("2026-06-15", "16:20", "17:35", "Barry's", "Barry's Williamsburg"),
-  timed("2026-06-15", "18:30", "20:30", "In Conversation: Firelei Báez, Jeffrey Gibson & Candice Hopkins", "The Great Hall at Cooper Union"),
-  timed("2026-06-15", "21:00", "22:00", "Delta Sky Club", "JFK"),
-  timed("2026-06-15", "22:30", "23:59", "Flight to Paris, DL 264", "JFK"),
-  allDay("2026-06-15", "2026-06-25", "FRANCE"),
-  timed("2026-06-16", "15:30", "17:00", "Burning Bar — Hot Pilates (21:30 Paris time)", "Paris"),
+  // — Monday June 15 + work trip —
+  timed("2026-06-15", "07:15", "08:00", "Drive to the airport"),
+  timed("2026-06-15", "09:00", "11:00", "Flight to Chicago, UA 512", "LGA"),
+  allDay("2026-06-15", "2026-06-19", "Chicago — work trip"),
+  timed("2026-06-16", "18:30", "20:00", "Dinner with the Chicago team"),
+  timed("2026-06-17", "10:00", "11:00", "Client presentation"),
+  timed("2026-06-18", "16:00", "18:00", "Flight home, UA 877", "ORD"),
 
-  // — reminders & the wedding stretch —
-  allDay("2026-06-18", "2026-06-19", "Bilt payment due"),
-  allDay("2026-06-18", "2026-06-19", "Capital One payment due"),
-  allDay("2026-06-22", "2026-06-23", "Amex Prime card payment due"),
-  allDay("2026-06-23", "2026-06-27", "Prime Day"),
-  allDay("2026-06-24", "2026-06-25", "Return from France"),
-  timed("2026-06-25", "13:00", "16:00", "Pickleball and pool", "480 Kent Ave"),
-  timed("2026-06-26", "13:00", "15:00", "Head to NJ"),
-  timed("2026-06-26", "15:00", "16:00", "Check into hotel", "SpringHill Suites, Somerset/Franklin Township"),
-  timed("2026-06-26", "18:30", "23:00", "[Mackenzie & Allen] Rehearsal Dinner", "Maggiano's Little Italy"),
-  allDay("2026-06-27", "2026-06-28", "MACKENZIE'S WEDDING!!!!!!"),
+  // — reminders & the wedding weekend —
+  allDay("2026-06-19", "2026-06-20", "Q3 plan due"),
+  allDay("2026-06-22", "2026-06-25", "Cat-sitting for Dana"), // multi-day, no travel — a span, not a trip
+  timed("2026-06-25", "18:00", "19:00", "Dinner with Grandma"),
+  timed("2026-06-26", "16:00", "17:00", "Drive to the venue"),
+  timed("2026-06-26", "18:30", "22:00", "Rehearsal dinner", "The Riverhouse"),
+  allDay("2026-06-27", "2026-06-28", "Jordan & Alex's wedding!"),
 ];
