@@ -42,3 +42,6 @@ next-env.d.ts
 
 # synced from repo root by sync-prompt (canonical copies live elsewhere)
 /prompts/
+
+# local file-backed store (dev fallback for Supabase) — never commit user data
+/.data/

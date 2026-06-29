@@ -41,14 +41,39 @@ message when one is given.
   "I've got the week from here" was rejected). NOT precise/spreadsheet-y,
   clipped, anxious/hovering, mock-formal, or a feelings-corrector.
 - Model: claude-sonnet-4-6, max_tokens 1000, system prompt cached.
+- Visual brand (chosen June 29): **"Gentleman's club"** — deep racing green
+  (`--ink #122019`), brass (`#c9a24b`/`#e3c97e`), oxblood (`#6e2a2a`), cream
+  (`#efe7d6`); Fraunces display serif for wordmark + headings; brass monogram
+  "S" crest. Defined in `web/app/globals.css` `:root` + `.brand`/`.crest`.
+  Stanley reads as an old-world British butler, not a SaaS dashboard.
 
-## State (June 12, 2026)
+## State (June 29, 2026)
 
 - Voice: passed the 12-probe battery; register defined by the sample
   exchanges in the soul file.
 - Known open issue for Fable: retreat-pattern decision-question never fires
   (0/5 attempts, morning + evening + multi-turn).
-- App: scaffold + briefing engine + tests done; runs on mock calendar.
-  Waiting on Stephie's Google Cloud OAuth creds (web/SETUP.md). Then:
-  onboarding interview, evening check-in + episode log (Layer 2), nightly
-  distillation, Stripe last. No autonomous calendar writes, ever, in v1.
+- App is now the **chat butler** built into `web/` (one Next.js app, deploys to
+  Vercel; see `web/SETUP.md`). Live channel is **Telegram** (free, no A2P, no
+  per-message cost — Stephie chose this over paying for Twilio SMS). Twilio SMS
+  kept as an optional alternate channel. Built + locally verified:
+  - Channel-agnostic: `routeInbound` (`lib/conversation.ts`) + `lib/notify.ts`
+    dispatch by `user.channel`. Telegram webhook `/api/telegram` (secret-token
+    verified); Twilio `/api/sms/inbound` (signature-verified) still present.
+    Users keyed by `channel` + `chat_id` (was `phone`).
+  - **Write gate**: Stanley replies in prose (soul untouched); a Haiku pass
+    (`lib/proposal.ts`) extracts a concrete change → `pending_proposal`; the
+    ONLY write site is `confirmPending()`, reached only after a texted yes.
+    Calendar writes via `lib/google.ts` (scope `calendar.events`).
+  - Storage abstraction (`lib/store/`): Supabase in prod, JSON file store as
+    the zero-account local fallback. Tokens AES-256-GCM encrypted at rest.
+  - Crons (`vercel.json`): morning/evening briefings + nightly distillation
+    (Episode Log → Quirks Profile, `lib/distill.ts`).
+  - **`/demo`**: stateless, no-setup interactive simulator (chat + live mock
+    calendar that animates on a confirmed write) — the "hiring managers can
+    use it now" surface while A2P registration is pending. `/console` keeps
+    the voice-testing tool.
+- Blocked on Stephie's accounts to go fully live: a Telegram bot (@BotFather,
+  free, minutes), Google Cloud OAuth, Supabase. Code is done and building; just
+  needs env vars + `npm run telegram:setup` after deploy.
+- Stripe last. No autonomous calendar writes, ever, in v1.

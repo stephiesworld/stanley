@@ -1,144 +1,80 @@
-"use client";
+import Link from "next/link";
+import { Bear } from "./Bear";
+import { ThemeToggle } from "./ThemeToggle";
 
-import { useState } from "react";
-
-interface Turn {
-  role: "user" | "assistant";
-  content: string; // what the API was sent (turn one = full context)
-  display: string; // what Stephie typed / Stanley said
-}
-
-const QUICK_PROBES = [
-  { label: "Morning briefing", message: "Morning briefing" },
-  { label: "Evening check-in", message: "evening check-in" },
-  { label: "What are you guarding?", message: "What are you guarding for me this week?" },
-];
-
-export default function Home() {
-  const [thread, setThread] = useState<Turn[]>([]);
-  const [message, setMessage] = useState("");
-  const [date, setDate] = useState(""); // optional simulated date
-  const [source, setSource] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
-
-  async function send(text: string) {
-    if (!text.trim() || loading) return;
-    setLoading(true);
-    setError("");
-    try {
-      const history = thread.map(({ role, content }) => ({ role, content }));
-      const res = await fetch("/api/briefing", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          message: text,
-          history,
-          ...(date && history.length === 0 ? { date } : {}),
-        }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Something went wrong");
-      if (history.length === 0) setSource(data.source);
-      setThread([
-        ...thread,
-        // turn one carries the assembled context so follow-ups stay grounded
-        { role: "user", content: data.context ?? text, display: text },
-        { role: "assistant", content: data.briefing, display: data.briefing },
-      ]);
-      setMessage("");
-    } catch (e) {
-      setError((e as Error).message);
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  function reset() {
-    setThread([]);
-    setSource("");
-    setError("");
-  }
-
-  const started = thread.length > 0;
+// Landing — the public face. Server component so it can read the configured
+// Telegram bot handle for the "message Stanley" line (falls back gracefully
+// before the bot is live, pointing everyone to the no-setup demo).
+export default function Landing() {
+  const bot = process.env.TELEGRAM_BOT_USERNAME ?? "";
 
   return (
-    <main className="stanley">
-      <h1>Stanley</h1>
-      <p className="tagline">He protects the shape of your week.</p>
-
-      {!started && (
-        <div className="setup">
-          <label>
-            Simulate a date <span className="hint">(optional — like the harness --date flag)</span>
-            <input
-              type="datetime-local"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-            />
-          </label>
-          <a className="connect" href="/api/auth/google">
-            Connect Google Calendar
-          </a>
+    <main className="landing">
+      <div className="topbar">
+        <div className="brand">
+          <span className="crest" aria-hidden="true">S</span>
+          <span className="brandname">Stanley</span>
         </div>
-      )}
+        <ThemeToggle />
+      </div>
+      <div className="hero">
+        <Bear size={108} className="hero-bear" />
+        <div>
+          <h1>He protects the shape of your week.</h1>
+          <p className="tagline">A calendar butler you reach by text. Dry, brief, entirely on your side.</p>
+        </div>
+      </div>
 
-      <div className="quick">
-        {QUICK_PROBES.map((p) => (
-          <button
-            key={p.label}
-            className="ghost"
-            disabled={loading}
-            onClick={() => send(p.message)}
-          >
-            {p.label}
-          </button>
-        ))}
-        {started && (
-          <button className="ghost reset" onClick={reset} disabled={loading}>
-            New session
-          </button>
+      <p className="lede">
+        Stanley watches the week ahead and tells you when it&apos;s about to get away from you —
+        a wedding crowding a workday, two big nights back to back, a recovery day you swore
+        you&apos;d keep. He proposes the fix in a sentence. He never moves a thing without your yes.
+      </p>
+
+      <div className="cta-row">
+        <Link className="btn primary" href="/demo">
+          Try the live demo →
+        </Link>
+        {bot ? (
+          <span className="sms-line">
+            or message Stanley on Telegram:{" "}
+            <a href={`https://t.me/${bot}`}>
+              <b>@{bot}</b>
+            </a>
+          </span>
+        ) : (
+          <span className="sms-line">Telegram bot coming soon — the demo works now.</span>
         )}
       </div>
 
-      {source && <p className="source">calendar source: {source}{date ? ` · simulated: ${date.replace("T", " ")}` : ""}</p>}
-      {error && <p className="error">{error}</p>}
+      <div className="cards">
+        <div className="card">
+          <h3>Propose, never act</h3>
+          <p>
+            Every change is a suggestion that needs your yes. The write to your calendar happens
+            only after you reply — enforced in code, not left to the model.
+          </p>
+        </div>
+        <div className="card">
+          <h3>Reads the whole shape</h3>
+          <p>
+            Not just open slots. Travel days, recovery time, one-big-thing-a-day — the rhythms
+            you actually live by, protected.
+          </p>
+        </div>
+        <div className="card">
+          <h3>Remembers you</h3>
+          <p>
+            He learns your preferences as probabilities, not rules, and they shift by season —
+            wedding crunch, between jobs, a trip abroad.
+          </p>
+        </div>
+      </div>
 
-      <section className="thread">
-        {thread.map((t, i) => (
-          <div key={i} className={`turn ${t.role}`}>
-            <span className="who">{t.role === "user" ? "You" : "Stanley"}</span>
-            {t.display.split("\n\n").map((para, j) => (
-              <p key={j}>{para}</p>
-            ))}
-          </div>
-        ))}
-        {loading && (
-          <div className="turn assistant">
-            <span className="who">Stanley</span>
-            <p className="thinking">…</p>
-          </div>
-        )}
-      </section>
-
-      <form
-        className="composer"
-        onSubmit={(e) => {
-          e.preventDefault();
-          send(message);
-        }}
-      >
-        <input
-          type="text"
-          placeholder={started ? "Reply to Stanley…" : "Ask Stanley anything…"}
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-          disabled={loading}
-        />
-        <button type="submit" disabled={loading || !message.trim()}>
-          Send
-        </button>
-      </form>
+      <p className="foot">
+        A working prototype. The demo runs the real Stanley against a sample week —
+        propose, confirm, watch the calendar change. <Link href="/console">Voice console →</Link>
+      </p>
     </main>
   );
 }
