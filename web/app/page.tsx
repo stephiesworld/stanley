@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Bear } from "./Bear";
+import { ButlerBear } from "./ButlerBear";
+import { PreviewChat } from "./PreviewChat";
 import { ThemeToggle } from "./ThemeToggle";
 
 // Landing — the public face. Server component so it can read the configured
@@ -19,9 +20,11 @@ export default function Landing() {
       </div>
 
       <section className="hero-grid">
-        <div className="hero-copy">
+        <div className="hero-copy reveal-up">
           <p className="eyebrow">Your personal calendar butler</p>
-          <h1>He protects the shape of your week.</h1>
+          <h1>
+            He protects the <em>shape</em> of your week.
+          </h1>
           <p className="tagline">Dry, brief, entirely on your side. You reach him by text.</p>
           <p className="lede">
             Stanley watches the week ahead and tells you when it&apos;s about to get away from
@@ -43,25 +46,13 @@ export default function Landing() {
           </div>
         </div>
 
-        {/* Product preview — show the propose → confirm → done loop */}
-        <aside className="preview" aria-label="A sample exchange with Stanley">
-          <div className="preview-bar">
-            <Bear size={24} className="avatar-bear" /> Stanley
-          </div>
-          <div className="preview-stream">
-            <div className="bubble them">
-              Tomorrow&apos;s tight — the 2:00 and 3:00 are back to back, and you have tennis at 7.
-              Move the 3:00 to 4:00?
-            </div>
-            <div className="bubble you">Y</div>
-            <div className="bubble them done">
-              <span className="done-tick" aria-hidden="true">✓</span> Done — moved the 3:00 to 4:00.
-            </div>
-          </div>
-        </aside>
+        <div className="hero-visual reveal-up delay-1">
+          <ButlerBear size={184} className="hero-butler" />
+          <PreviewChat />
+        </div>
       </section>
 
-      <section className="steps" aria-label="How it works">
+      <section className="steps reveal-up" aria-label="How it works">
         <div className="step">
           <span className="step-n">1</span>
           <h3>Connect your calendar</h3>
@@ -79,7 +70,7 @@ export default function Landing() {
         </div>
       </section>
 
-      <div className="cards">
+      <div className="cards reveal-up">
         <div className="card">
           <h3>Propose, never act</h3>
           <p>
