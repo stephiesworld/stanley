@@ -14,6 +14,21 @@ export const runtime = "nodejs";
 // conversation brain and the SAME propose→confirm→write gate as SMS — the only
 // difference is the calendar is the in-memory mock, not a real Google account.
 
+// A neutral, nameless profile so demo visitors aren't addressed by anyone's
+// real name (the live bot uses the principal's own profile instead).
+const DEMO_PROFILE = `PROFILE — demo user
+
+The user's name is not on file. Address them directly, without a first name.
+
+Hard rules:
+- No back-to-back meetings; at least 15 minutes between.
+- Slow mornings: nothing before 10am unless unavoidable.
+
+Strong preferences:
+- One big social event per day, maximum; recovery time after big events.
+- A recovery day after travel when possible.
+- Protect focused work blocks during the day.`;
+
 interface DemoBody {
   message: string;
   date?: string; // simulated "now"
@@ -43,7 +58,7 @@ export async function POST(req: NextRequest) {
 
     // Armed proposal + an affirmative → execute the write on the mock calendar.
     if (pending && isAffirmative(message)) {
-      const { byId } = prepareContext(events, message, now);
+      const { byId } = prepareContext(events, message, now, DEMO_PROFILE);
       const summary = summarize(pending, byId);
       const cal = mockCalendarSource(() => events, () => {});
       const inverse = await cal.apply(pending);
@@ -55,7 +70,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Normal turn.
-    const { events: windowed, context } = prepareContext(events, message, now);
+    const { events: windowed, context } = prepareContext(events, message, now, DEMO_PROFILE);
     const reply = await askStanley(context, history);
     const action = await extractProposal({
       userMessage: message,

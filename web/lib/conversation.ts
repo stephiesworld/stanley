@@ -93,10 +93,12 @@ export function prepareContext(
   raw: { id?: string | null }[] | unknown[],
   userMessage: string,
   now: Date,
+  profileOverride?: string,
 ): TurnContext {
   const events = windowEvents(normalizeAll(raw as never[]), now, WINDOW_DAYS);
   const trips = extractTrips(events);
-  const context = assembleContext({ now, events, trips, profile: loadProfile(), userMessage });
+  const profile = profileOverride ?? loadProfile();
+  const context = assembleContext({ now, events, trips, profile, userMessage });
   const byId = new Map(events.map((e) => [e.id, e]));
   return { events, byId, context };
 }
