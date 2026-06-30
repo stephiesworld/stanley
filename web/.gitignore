@@ -40,8 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# synced from repo root by sync-prompt (canonical copies live elsewhere)
-/prompts/
+# web/prompts/ is COMMITTED (synced from the repo-root soul) so cloud builds,
+# which upload only web/, ship the soul. Re-sync + commit after a soul edit.
 
 # local file-backed store (dev fallback for Supabase) — never commit user data
 /.data/
