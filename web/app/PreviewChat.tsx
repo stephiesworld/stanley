@@ -20,17 +20,16 @@ export function PreviewChat() {
   const [typing, setTyping] = useState(false);
 
   useEffect(() => {
-    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
-    if (reduce) {
-      setShown(SCRIPT.length);
-      return;
-    }
     let cancelled = false;
     const timers: ReturnType<typeof setTimeout>[] = [];
     const wait = (ms: number) =>
       new Promise<void>((r) => timers.push(setTimeout(r, ms)));
 
     (async () => {
+      if (window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches) {
+        setShown(SCRIPT.length);
+        return;
+      }
       // loop forever with a calm pause between runs
       for (;;) {
         setShown(0);
