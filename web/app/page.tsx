@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { PreviewChat } from "./PreviewChat";
+import { HeroScene } from "./HeroScene";
 import { ThemeToggle } from "./ThemeToggle";
 
-// Landing — restraint over decoration. One display face, air, a single
-// focal object (the product itself), colour used sparingly.
+// Landing — built around one idea: the product demonstrating itself.
+// Monumental type up top, then the scene (chat + day-sheet, synchronized),
+// then two quiet rows of prose. Nothing decorative that isn't the product.
 export default function Landing() {
   const bot = (process.env.TELEGRAM_BOT_USERNAME ?? "").replace(/[<>]/g, "");
 
@@ -20,18 +21,17 @@ export default function Landing() {
       <div className="hairline" />
 
       <section className="hero">
-        <div className="hero-copy reveal-up">
-          <p className="eyebrow">A butler for your week</p>
-          <h1>
-            He protects the <em>shape</em> of your week.
-          </h1>
+        <h1 className="display reveal-up">
+          He protects the <em>shape</em> of your&nbsp;week.
+        </h1>
+        <div className="hero-row reveal-up">
           <p className="lede">
             Stanley reads the week ahead and tells you when it&apos;s about to get
             away from you — a wedding crowding a workday, two big nights back to
             back, the recovery day you meant to keep. He proposes the fix in a
             sentence, and never moves a thing without your word.
           </p>
-          <div className="cta-row">
+          <div className="hero-cta">
             <Link className="btn primary" href="/demo">
               Try the demo
             </Link>
@@ -40,13 +40,11 @@ export default function Landing() {
                 Message @{bot}
               </a>
             ) : null}
+            <p className="trust">Read-only until you agree · Google Calendar · Telegram</p>
           </div>
-          <p className="trust">Read-only until you agree · Google Calendar · Telegram</p>
         </div>
 
-        <div className="hero-visual reveal-up delay-1">
-          <PreviewChat />
-        </div>
+        <HeroScene />
       </section>
 
       <section className="section" aria-label="How it works">

@@ -4,11 +4,13 @@ import { Fraunces } from "next/font/google";
 import "./globals.css";
 
 // Fraunces — an old-style display serif with real character; Stanley's wordmark
-// and headings. Body stays Georgia (set in globals) for warm, readable prose.
+// and headings. Loaded as a variable font so we get the full optical-size axis
+// (true display cuts at headline sizes) plus SOFT/WONK for bespoke detailing.
+// Body stays Georgia (set in globals) for warm, readable prose.
 const fraunces = Fraunces({
   subsets: ["latin"],
   variable: "--font-fraunces",
-  weight: ["400", "500", "600"],
+  axes: ["opsz", "SOFT", "WONK"],
   style: ["normal", "italic"],
 });
 

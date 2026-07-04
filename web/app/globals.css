@@ -129,15 +129,33 @@ a:hover {
   vertical-align: middle;
 }
 
-/* ── Landing — restrained editorial ──────────────────────────────────────
-   One display face, generous air, colour used sparingly. The product itself
-   is the only ornament. */
+/* ── Landing — one idea, executed hard ───────────────────────────────────
+   Monumental Fraunces up top (variable: real optical sizing), then the
+   scene — chat and day-sheet on one clock — as the only visual object.
+   Brass for structure, oxblood for the human "yes". */
+
+::selection {
+  background: var(--brass);
+  color: #201a09;
+}
+
+/* Faint grain — material, not decoration */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.028;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
 .landing {
   position: relative;
   z-index: 2;
   max-width: 1140px;
   margin: 0 auto;
-  padding: clamp(1.8rem, 5vh, 3.2rem) clamp(22px, 5vw, 60px) 6rem;
+  padding: clamp(1.8rem, 5vh, 3rem) clamp(22px, 5vw, 60px) 6rem;
 }
 
 /* Masthead */
@@ -161,71 +179,65 @@ a:hover {
   background: var(--line);
 }
 
-/* Small-caps eyebrow — the one recurring label */
-.eyebrow {
-  font-family: -apple-system, system-ui, sans-serif;
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.22em;
-  text-transform: uppercase;
-  color: var(--brass);
-  margin: 0 0 1.4rem;
-}
-
-/* Hero — copy beside the product, plenty of air */
-.hero {
-  display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: clamp(38px, 6vw, 92px);
-  align-items: center;
-  margin-top: clamp(3.4rem, 9vh, 7rem);
-  margin-bottom: clamp(4rem, 12vh, 9rem);
-}
-.hero-copy h1 {
+/* Monumental display headline — Fraunces at true display optical size */
+.display {
   font-family: var(--font-display);
-  font-weight: 500;
-  font-size: clamp(2.45rem, 4.4vw, 3.7rem);
-  line-height: 1.07;
-  letter-spacing: -0.017em;
+  font-weight: 560;
+  font-size: clamp(3rem, 7.4vw, 6.6rem);
+  line-height: 1;
+  letter-spacing: -0.028em;
   color: var(--paper);
-  margin: 0 0 1.6rem;
+  margin: clamp(3rem, 9vh, 5.5rem) 0 0;
+  max-width: 14ch;
   text-wrap: balance;
 }
-.hero-copy h1 em {
+.display em {
   font-style: italic;
   font-weight: 500;
+  font-variation-settings: "WONK" 1; /* the one wink in the whole page */
+  margin-right: 0.09em; /* the italic swash otherwise swallows the word space */
+}
+
+/* Lede + CTA on one asymmetric row */
+.hero-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(260px, 0.75fr);
+  gap: clamp(36px, 6vw, 84px);
+  align-items: end;
+  margin-top: 2.6rem;
 }
 .lede {
-  font-size: 1.06rem;
+  font-size: 1.07rem;
   line-height: 1.72;
   color: var(--paper-soft);
-  max-width: 46ch;
+  max-width: 52ch;
   margin: 0;
 }
-.cta-row {
+.hero-cta {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 14px;
-  margin: 2.3rem 0 1.15rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 12px;
+  justify-self: end;
 }
 .trust {
   font-family: -apple-system, system-ui, sans-serif;
-  font-size: 0.78rem;
+  font-size: 0.76rem;
   letter-spacing: 0.02em;
   color: var(--muted);
-  margin: 0;
+  margin: 4px 0 0;
 }
 
 /* Buttons — matte, confident, theme-safe */
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   font-family: -apple-system, system-ui, sans-serif;
   font-size: 0.95rem;
   font-weight: 500;
   letter-spacing: 0.01em;
-  padding: 12px 22px;
+  padding: 12px 24px;
   border-radius: 8px;
   cursor: pointer;
   border: 1px solid transparent;
@@ -248,51 +260,184 @@ a:hover {
   border-color: var(--brass);
   color: var(--brass-2);
 }
+.btn:focus-visible,
+.theme-toggle:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
 
-/* Product preview — the single focal object, framed like a real app */
-.hero-visual {
-  position: relative;
-}
-.device {
+/* ── The scene — chat and day-sheet on one clock ─────────────────────── */
+.scene {
+  display: grid;
+  grid-template-columns: 1.06fr 0.94fr;
+  margin-top: clamp(3rem, 7vh, 4.5rem);
   border: 1px solid var(--line);
-  border-radius: 16px;
-  background: var(--ink-2);
-  box-shadow: 0 34px 68px -30px rgba(0, 0, 0, 0.6);
+  border-radius: 18px;
   overflow: hidden;
+  background: var(--ink-2);
+  box-shadow: 0 44px 88px -40px rgba(0, 0, 0, 0.65);
 }
-.device-head {
+
+/* chat half */
+.scene-chat {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--line);
+  min-height: 396px;
+}
+.scene-head {
   display: flex;
   align-items: center;
   gap: 11px;
-  padding: 13px 16px;
+  padding: 13px 18px;
   border-bottom: 1px solid var(--line);
 }
-.device-avatar {
-  flex: none;
-}
-.device-name {
+.scene-avatar { flex: none; }
+.scene-name {
   font-family: var(--font-display);
   font-weight: 600;
   font-size: 1rem;
   color: var(--paper);
 }
-.device-status {
+.scene-status {
   margin-left: auto;
   font-family: -apple-system, system-ui, sans-serif;
   font-size: 0.72rem;
-  letter-spacing: 0.02em;
   color: var(--muted);
 }
-.preview-stream {
+.scene-stream {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding: 18px 16px 20px;
+  padding: 20px 18px;
+}
+.sc-bubble {
+  max-width: 88%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  line-height: 1.5;
+  font-size: 0.94rem;
+  font-family: -apple-system, system-ui, sans-serif;
+  animation: bubbleIn 0.3s ease both;
+}
+.sc-bubble.them {
+  align-self: flex-start;
+  background: var(--bubble-them);
+  color: var(--paper);
+  border-bottom-left-radius: 5px;
+}
+.sc-bubble.you {
+  align-self: flex-end;
+  background: var(--oxblood); /* her word — the decisive act, sealed in oxblood */
+  color: #f3e9dc;
+  border-bottom-right-radius: 5px;
+}
+.sc-bubble.done { display: flex; align-items: baseline; gap: 8px; }
+.done-tick { color: var(--ok); font-weight: 600; }
+.sc-bubble.done .done-tick { display: inline-block; animation: tickPop 0.4s ease both; }
+
+.sc-typing { display: flex; gap: 5px; align-items: center; }
+.sc-typing span {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--muted);
+  animation: dotPulse 1.2s infinite ease-in-out;
+}
+.sc-typing span:nth-child(2) { animation-delay: 0.18s; }
+.sc-typing span:nth-child(3) { animation-delay: 0.36s; }
+
+/* day-sheet half */
+.scene-sheet {
+  background: var(--ink-3);
+  padding: 13px 18px 20px;
+}
+.sheet-head {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding-bottom: 13px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+}
+.sheet-day {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--paper);
+}
+.sheet-date {
+  margin-left: auto;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+.sheet-grid {
+  position: relative;
+  margin-top: 10px;
+}
+.sheet-hour {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-top: 1px solid var(--line);
+}
+.sheet-hour span {
+  position: absolute;
+  top: -0.55em;
+  left: 0;
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: 0.68rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+  background: var(--ink-3);
+  padding-right: 6px;
+}
+.evt-block {
+  position: absolute;
+  left: 30px;
+  right: 4px;
+  display: flex;
+  align-items: center;
+  padding: 0 12px;
+  border-radius: 7px;
+  border-left: 2px solid var(--brass);
+  background: rgba(201, 162, 75, 0.09);
+  color: var(--paper);
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: 0.8rem;
+  font-weight: 500;
+  transition: top 0.9s cubic-bezier(0.3, 0.7, 0.15, 1), background 0.5s ease, border-color 0.5s ease;
+}
+.evt-block.conflict {
+  border-left-color: var(--oxblood-2);
+  background: rgba(139, 58, 58, 0.18);
+}
+.evt-block.snap {
+  transition: none; /* between loops the sheet resets off-stage, no rewind */
+}
+.evt-block.resolved {
+  animation: settle 1.6s ease both;
+}
+@keyframes settle {
+  0% { background: rgba(201, 162, 75, 0.38); }
+  100% { background: rgba(201, 162, 75, 0.09); }
 }
 
-/* Sections — how it works / the manner */
+/* Small-caps eyebrow */
+.eyebrow {
+  font-family: -apple-system, system-ui, sans-serif;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--brass);
+  margin: 0 0 1.4rem;
+}
+
+/* Sections */
 .section {
-  margin-top: clamp(4rem, 11vh, 8rem);
+  margin-top: clamp(4rem, 10vh, 7rem);
 }
 .grid-3 {
   display: grid;
@@ -329,22 +474,20 @@ a:hover {
   display: flex;
   align-items: center;
   gap: 13px;
-  margin-top: clamp(4rem, 11vh, 8rem);
+  margin-top: clamp(4rem, 10vh, 7rem);
   padding-top: 1.5rem;
   border-top: 1px solid var(--line);
   font-family: -apple-system, system-ui, sans-serif;
   font-size: 0.85rem;
   color: var(--muted);
 }
-.colophon-name {
-  color: var(--paper-soft);
-}
+.colophon-name { color: var(--paper-soft); }
 .colophon a {
   margin-left: auto;
   color: var(--brass-2);
 }
 
-/* Motion — subtle, purposeful */
+/* Motion */
 @keyframes revealUp {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
@@ -356,44 +499,37 @@ a:hover {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: none; }
 }
-.bubble.reveal { animation: bubbleIn 0.3s ease both; }
-.bubble.done { display: flex; align-items: baseline; gap: 8px; }
-.done-tick { color: var(--ok); font-weight: 600; }
-.bubble.done .done-tick { display: inline-block; animation: tickPop 0.4s ease both; }
 @keyframes tickPop {
   0% { transform: scale(0); }
   60% { transform: scale(1.2); }
   100% { transform: scale(1); }
 }
-
-.typing-dots { display: flex; gap: 5px; align-items: center; }
-.typing-dots span {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--muted);
-  animation: dotPulse 1.2s infinite ease-in-out;
-}
-.typing-dots span:nth-child(2) { animation-delay: 0.18s; }
-.typing-dots span:nth-child(3) { animation-delay: 0.36s; }
 @keyframes dotPulse {
   0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
   30% { opacity: 1; transform: translateY(-3px); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal-up, .bubble.reveal, .typing-dots span, .bubble.done .done-tick {
+  .reveal-up, .sc-bubble, .sc-typing span, .sc-bubble.done .done-tick, .evt-block.resolved {
     animation: none !important;
   }
+  .evt-block { transition: none !important; }
   .reveal-up { opacity: 1; transform: none; }
 }
 
-@media (max-width: 860px) {
-  .hero {
+@media (max-width: 900px) {
+  .display { max-width: none; }
+  .hero-row {
     grid-template-columns: 1fr;
-    gap: 38px;
-    margin-top: 2.6rem;
-    margin-bottom: 3.5rem;
+    gap: 26px;
+    align-items: start;
+  }
+  .hero-cta { justify-self: start; }
+  .scene { grid-template-columns: 1fr; }
+  .scene-chat {
+    border-right: none;
+    border-bottom: 1px solid var(--line);
+    min-height: 0;
   }
   .grid-3 { grid-template-columns: 1fr; gap: 30px; }
   .col p { max-width: none; }
