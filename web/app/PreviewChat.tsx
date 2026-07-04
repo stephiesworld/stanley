@@ -1,18 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Bear } from "./Bear";
 
-// The hero's living proof: Stanley's propose → "Y" → "Done ✓" exchange that
-// types itself out on load. Honors prefers-reduced-motion (shows it all at
-// once). Loops gently so the page always feels alive.
+// The hero's living proof: Stanley's propose → "Yes" → "Done ✓" exchange that
+// types itself out, framed as a real product. Honors prefers-reduced-motion
+// (shows it all at once). Loops gently so the page always feels alive.
 const SCRIPT = [
   {
     who: "them" as const,
-    text: "Tomorrow's tight — the 2:00 and 3:00 are back to back, and you have tennis at 7. Move the 3:00 to 4:00?",
+    text: "Tomorrow's tight — the 2:00 and 3:00 run back to back, and you have tennis at 7. Move the 3:00 to 4:00?",
     typeMs: 1300,
   },
-  { who: "you" as const, text: "Y", typeMs: 700 },
-  { who: "them" as const, text: "Done — moved the 3:00 to 4:00.", typeMs: 1100, done: true },
+  { who: "you" as const, text: "Yes, please", typeMs: 700 },
+  { who: "them" as const, text: "Done — the 3:00 now sits at 4:00.", typeMs: 1100, done: true },
 ];
 
 export function PreviewChat() {
@@ -58,7 +59,12 @@ export function PreviewChat() {
   }, []);
 
   return (
-    <aside className="preview" aria-label="A sample exchange with Stanley">
+    <aside className="device" aria-label="A sample exchange with Stanley">
+      <div className="device-head">
+        <Bear size={38} className="device-avatar" />
+        <span className="device-name">Stanley</span>
+        <span className="device-status">reading your week</span>
+      </div>
       <div className="preview-stream">
         {SCRIPT.slice(0, shown).map((b, i) => (
           <div key={i} className={`bubble ${b.who} reveal${b.done ? " done" : ""}`}>

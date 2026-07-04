@@ -1,108 +1,97 @@
 import Link from "next/link";
-import { ButlerBear } from "./ButlerBear";
 import { PreviewChat } from "./PreviewChat";
 import { ThemeToggle } from "./ThemeToggle";
 
-// Landing — an editorial spread, not a centered SaaS template. Masthead,
-// asymmetric hero, a pull-quote in Stanley's voice, big serif numerals.
+// Landing — restraint over decoration. One display face, air, a single
+// focal object (the product itself), colour used sparingly.
 export default function Landing() {
-  const bot = process.env.TELEGRAM_BOT_USERNAME ?? "";
+  const bot = (process.env.TELEGRAM_BOT_USERNAME ?? "").replace(/[<>]/g, "");
 
   return (
-    <main className="landing editorial">
+    <main className="landing">
       <header className="masthead">
         <div className="brand">
           <span className="crest" aria-hidden="true">S</span>
           <span className="brandname">Stanley</span>
         </div>
-        <span className="masthead-tag">A personal calendar butler · est. 2026</span>
+        <span className="masthead-tag">Personal calendar butler</span>
         <ThemeToggle />
       </header>
-      <div className="rule-brass" />
+      <div className="hairline" />
 
-      <section className="ed-hero">
-        <div className="ed-hero-copy reveal-up">
-          <p className="ed-eyebrow">№ 01 — The premise</p>
+      <section className="hero">
+        <div className="hero-copy reveal-up">
+          <p className="eyebrow">A butler for your week</p>
           <h1>
             He protects the <em>shape</em> of your week.
           </h1>
           <p className="lede">
-            <span className="dropcap">S</span>tanley watches the week ahead and tells you when
-            it&apos;s about to get away from you — a wedding crowding a workday, two big nights
-            back to back, a recovery day you swore you&apos;d keep. He proposes the fix in a
-            sentence, and never moves a thing without your yes.
+            Stanley reads the week ahead and tells you when it&apos;s about to get
+            away from you — a wedding crowding a workday, two big nights back to
+            back, the recovery day you meant to keep. He proposes the fix in a
+            sentence, and never moves a thing without your word.
           </p>
           <div className="cta-row">
             <Link className="btn primary" href="/demo">
-              Try the live demo →
+              Try the demo
             </Link>
             {bot ? (
               <a className="btn ghost" href={`https://t.me/${bot}`}>
                 Message @{bot}
               </a>
-            ) : (
-              <span className="sms-line">Telegram bot coming soon — the demo works now.</span>
-            )}
+            ) : null}
           </div>
+          <p className="trust">Read-only until you agree · Google Calendar · Telegram</p>
         </div>
 
-        <div className="hero-visual ed-hero-visual reveal-up delay-1">
-          <ButlerBear size={184} className="hero-butler" />
+        <div className="hero-visual reveal-up delay-1">
           <PreviewChat />
         </div>
       </section>
 
-      <section className="pullquote reveal-up" aria-label="In Stanley's words">
-        <p>
-          Saturday&apos;s empty, three days from the wedding. I intend to keep it that way —
-          unless you object.
-        </p>
-        <span className="attr">Stanley, on guarding your week</span>
-      </section>
-
-      <section className="ed-steps" aria-label="How it works">
-        <p className="ed-eyebrow">№ 02 — How it works</p>
-        <div className="ed-steps-grid">
-          <div className="ed-step">
-            <span className="numeral">01</span>
+      <section className="section" aria-label="How it works">
+        <p className="eyebrow">How it works</p>
+        <div className="grid-3">
+          <div className="col">
+            <span className="idx">01</span>
             <h3>Connect your calendar</h3>
-            <p>One tap to link Google Calendar. Read and write, nothing else.</p>
+            <p>One tap links Google Calendar. Nothing else, and nothing shared.</p>
           </div>
-          <div className="ed-step">
-            <span className="numeral">02</span>
-            <h3>He watches and proposes</h3>
-            <p>A morning read, an evening check-in, and a nudge when the week tips.</p>
+          <div className="col">
+            <span className="idx">02</span>
+            <h3>He watches, and proposes</h3>
+            <p>A morning read, an evening check-in, a quiet word when the week tips.</p>
           </div>
-          <div className="ed-step">
-            <span className="numeral">03</span>
-            <h3>Reply Y — it&apos;s done</h3>
-            <p>Nothing moves until you say yes. Changed your mind? Just say &ldquo;undo.&rdquo;</p>
+          <div className="col">
+            <span className="idx">03</span>
+            <h3>You say the word</h3>
+            <p>Nothing moves until you agree. Changed your mind? Simply say &ldquo;undo.&rdquo;</p>
           </div>
         </div>
       </section>
 
-      <section className="ed-features" aria-label="The manner">
-        <p className="ed-eyebrow">№ 03 — The manner</p>
-        <div className="ed-features-grid">
-          <div className="ed-feature">
+      <section className="section" aria-label="The manner">
+        <p className="eyebrow">The manner</p>
+        <div className="grid-3">
+          <div className="col">
             <h3>Propose, never act</h3>
             <p>
-              Every change needs your yes. The write to your calendar happens only after you
-              reply — enforced in code, not left to the model.
+              Every change waits for your yes. The write happens only after you
+              reply — enforced in code, not left to a model.
             </p>
           </div>
-          <div className="ed-feature">
+          <div className="col">
             <h3>Reads the whole shape</h3>
             <p>
-              Not just open slots. Travel days, recovery time, one-big-thing-a-day — the rhythms
-              you actually live by, protected.
+              Not just open slots. Travel days, recovery time, one big thing a day —
+              the rhythms you actually live by.
             </p>
           </div>
-          <div className="ed-feature">
+          <div className="col">
             <h3>Remembers you</h3>
             <p>
-              He learns your preferences as probabilities, not rules, and they shift by season —
-              wedding crunch, between jobs, a trip abroad.
+              He learns your habits as leanings, not rules — and they shift by
+              season: a wedding week, between jobs, a trip abroad.
             </p>
           </div>
         </div>
@@ -111,8 +100,7 @@ export default function Landing() {
       <footer className="colophon">
         <span className="crest sm" aria-hidden="true">S</span>
         <span className="colophon-name">Stanley — at your service.</span>
-        <span className="colophon-meta">No. 1 · 2026</span>
-        <Link href="/console">Voice console →</Link>
+        <Link href="/console">Voice console</Link>
       </footer>
     </main>
   );
