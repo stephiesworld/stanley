@@ -48,9 +48,14 @@ message when one is given.
   uppercase display + Space Mono for every label/ledger/chat line; no border
   radius except chat bubbles, no shadows, everything hairlines and rectangles.
   Concept: "a calendar is the only honest autobiography." Defined in
-  `web/app/keeper.css` (`.kd-*` landing, `.kdc-*` console). Handoff copy is
-  design-final — do not paraphrase it. The old gentleman's-club tokens remain
-  in `globals.css` only for the `/console` voice tool.
+  `web/app/keeper.css` (`.kd-*` landing, `.kdc-*` console). Revised July 10
+  per Stephie: big headings are **sentence case** (not all-caps), emphasis
+  words sit in a **1px accent box** (a lit cell — never the italic-accent-word
+  cliché), and copy runs a notch softer than the handoff (goodbye not funeral,
+  "keeps the week from getting the better of you", CTA "Give Stanley the week.
+  He'll give most of it back."). Labels/nav/buttons stay uppercase mono. The
+  old gentleman's-club tokens remain in `globals.css` only for the `/console`
+  voice tool.
 
 ## State (July 10, 2026)
 

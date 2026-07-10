@@ -29,7 +29,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_BASE_URL ?? "http://localhost:3000"),
   title: "Stanley — Keeper of Days",
   description:
-    "A calendar is the only honest autobiography. Stanley reads yours, learns the person it describes, and politely refuses to let your week ruin them.",
+    "A calendar is the only honest autobiography. Stanley reads yours, learns the person it describes, and politely keeps the week from getting the better of you.",
   openGraph: {
     title: "Stanley — Keeper of Days",
     description: "A calendar is the only honest autobiography.",

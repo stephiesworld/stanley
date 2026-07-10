@@ -32,16 +32,25 @@ export default function OpengraphImage() {
           style={{
             display: "flex",
             flexDirection: "column",
-            fontSize: "104px",
+            fontSize: "92px",
             fontWeight: 900,
-            lineHeight: 1,
-            letterSpacing: "-3px",
-            textTransform: "uppercase",
+            lineHeight: 1.06,
+            letterSpacing: "-1px",
           }}
         >
-          <div style={{ display: "flex" }}>A calendar is the</div>
-          <div style={{ display: "flex" }}>
-            only honest&nbsp;<span style={{ color: "#FF4D2E", fontStyle: "italic" }}>autobiography.</span>
+          <div style={{ display: "flex" }}>A calendar is the only</div>
+          <div style={{ display: "flex", alignItems: "center" }}>
+            honest&nbsp;
+            <div
+              style={{
+                display: "flex",
+                color: "#FF4D2E",
+                border: "2px solid #FF4D2E",
+                padding: "0 14px",
+              }}
+            >
+              autobiography.
+            </div>
           </div>
         </div>
         <div style={{ display: "flex", fontSize: "24px", letterSpacing: "3px", color: "#6B675C" }}>

@@ -59,10 +59,16 @@
   letter-spacing: 3px; color: var(--kd-accent); margin-bottom: 28px;
 }
 .kd-h1 {
-  font-size: 116px; line-height: 0.94; margin: 0 0 40px; font-weight: 900;
-  letter-spacing: -3px; text-transform: uppercase; max-width: 1300px;
+  font-size: 96px; line-height: 1; margin: 0 0 40px; font-weight: 900;
+  letter-spacing: -1px; max-width: 1300px;
 }
-.kd-h1 em, .kd-h2 em { font-style: italic; font-weight: 800; color: var(--kd-accent); }
+/* Emphasis device: the key word sits in a hairline accent box — a lit cell,
+   an entry in the ledger — instead of the italic-accent-word cliché. */
+.kd-h1 em, .kd-h2 em, .kd-cta h2 em {
+  font-style: normal; font-weight: 900; color: var(--kd-accent);
+  border: 1px solid var(--kd-accent); padding: 0 0.12em; margin: 0 0.03em;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+}
 .kd-hero-row { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end; }
 .kd-hero-copy { font-size: 24px; line-height: 1.5; margin: 0; color: var(--kd-sec); font-weight: 400; }
 .kd-hero-cta { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
@@ -106,7 +112,7 @@
   font-family: var(--font-space-mono), monospace; font-size: 14px;
   letter-spacing: 3px; color: var(--kd-accent);
 }
-.kd-h2 { font-size: 64px; line-height: 0.98; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+.kd-h2 { font-size: 56px; line-height: 1.04; margin: 0; font-weight: 900; letter-spacing: -0.5px; }
 .kd-body { font-size: 20px; line-height: 1.55; color: var(--kd-sec); margin: 0; }
 .kd-body .ital { font-style: italic; color: var(--kd-fg); }
 
@@ -188,15 +194,14 @@
 }
 .kd-interlude-inner { position: relative; display: flex; flex-direction: column; gap: 20px; align-items: center; }
 .kd-ask { font-family: var(--font-space-mono), monospace; font-size: 14px; letter-spacing: 3px; color: var(--kd-dim); }
-.kd-interlude-q { font-size: 72px; font-weight: 400; font-style: italic; line-height: 1.1; max-width: 1000px; }
-.kd-interlude-q .shout { color: var(--kd-accent); font-weight: 800; font-style: normal; text-transform: uppercase; }
+.kd-interlude-q { font-size: 64px; font-weight: 400; line-height: 1.12; max-width: 1000px; }
+.kd-interlude-q .shout { color: var(--kd-accent); font-weight: 800; }
 
 .kd-cta {
   border-top: 1px solid var(--kd-line); padding: 110px 56px; text-align: center;
   display: flex; flex-direction: column; gap: 32px; align-items: center;
 }
-.kd-cta h2 { font-size: 96px; line-height: 0.95; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; }
-.kd-cta h2 em { color: var(--kd-accent); font-style: italic; }
+.kd-cta h2 { font-size: 76px; line-height: 1.02; margin: 0; font-weight: 900; letter-spacing: -1px; }
 .kd-cta .kd-btn { font-size: 20px; padding: 24px 56px; }
 .kd-cta-foot { font-family: var(--font-space-mono), monospace; font-size: 13px; color: var(--kd-dim); letter-spacing: 2px; }
 
@@ -207,7 +212,7 @@
   .kd-nav-sub, .kd-nav-links .anchor { display: none; }
   .kd-hero { padding: 44px 20px 36px; }
   .kd-eyebrow { font-size: 11px; letter-spacing: 2px; margin-bottom: 18px; line-height: 1.6; }
-  .kd-h1 { font-size: 37px; line-height: 1; letter-spacing: -1.5px; margin-bottom: 20px; overflow-wrap: anywhere; }
+  .kd-h1 { font-size: 36px; line-height: 1.05; letter-spacing: -0.5px; margin-bottom: 20px; overflow-wrap: anywhere; }
   .kd-hero-row { grid-template-columns: 1fr; gap: 24px; }
   .kd-hero-copy { font-size: 16px; }
   .kd-hero-cta { align-items: stretch; gap: 14px; }
@@ -229,7 +234,7 @@
   .kd-ledger { display: block; }
   .kd-ledger-copy { padding: 40px 20px; border-right: none; gap: 14px; }
   .kd-section-label { font-size: 11px; letter-spacing: 2px; }
-  .kd-h2 { font-size: 34px; line-height: 1; }
+  .kd-h2 { font-size: 30px; line-height: 1.08; }
   .kd-body { font-size: 15px; }
   .kd-ledger-scroller { display: none; }
   .kd-ledger-stack { display: block; margin: 0 20px 40px; }
@@ -303,7 +308,7 @@
 
 .kdc-center { flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden; }
 .kdc-center-head { padding: 24px 28px 12px; display: flex; justify-content: space-between; align-items: baseline; }
-.kdc-center-head h1 { margin: 0; font-size: 34px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; }
+.kdc-center-head h1 { margin: 0; font-size: 34px; font-weight: 900; letter-spacing: -0.5px; }
 .kdc-center-head .sub { font-family: var(--font-space-mono), monospace; font-size: 12px; letter-spacing: 2px; color: var(--kd-dim); }
 
 .kdc-week {

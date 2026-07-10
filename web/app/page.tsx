@@ -29,19 +29,19 @@ const LIT_MOBILE: Record<number, number> = {
 const LEGEND_DESKTOP = [
   { cell: "037", label: "the first date — he booked nothing after 10pm since" },
   { cell: "121", label: "the marathon — taper week was his idea" },
-  { cell: "203", label: "dad’s surgery, all clear — the week he cancelled everything, once asked" },
+  { cell: "203", label: "dad’s all-clear — the week Stanley emptied, once asked" },
   { cell: "289", label: "the job offer — he cleared the runway" },
   { cell: "358", label: "everyone home for christmas — protected since october" },
 ];
 const LEGEND_MOBILE = [
   { cell: "037", label: "the first date — he booked nothing after 10pm since" },
-  { cell: "109", label: "dad’s surgery, all clear — he cancelled everything, once asked" },
+  { cell: "109", label: "dad’s all-clear — the week Stanley emptied, once asked" },
   { cell: "150", label: "the job offer — he cleared the runway" },
 ];
 
 const LEDGER = [
   { time: "MON 09:00", text: "Interview — the job you almost didn’t apply for", tag: "WORK", note: "stanley: I pressed. Gently. You’re welcome." },
-  { time: "TUE 19:30", text: "Dinner w/ R. — third date, the good tapas place", tag: "LOVE", note: "stanley: I moved your 6pm. You never knew it existed." },
+  { time: "TUE 19:30", text: "Dinner w/ R. — third date, the good tapas place", tag: "LOVE", note: "stanley: I moved your 6pm. With your blessing, obviously." },
   { time: "WED 07:15", text: "Bloodwork, fasting", tag: "HEALTH", note: "stanley: fourth booking. This one stands, sir." },
   { time: "THU 18:00", text: "Call mum", tag: "FAMILY", note: "stanley: immovable. As agreed. As it should be." },
   { time: "FRI 20:00", text: "Dan’s stag — you are the best man, act like it", tag: "MATES", note: "stanley: Saturday has been emptied. Preemptively." },
@@ -107,9 +107,9 @@ export default function Landing() {
           </h1>
           <div className="kd-hero-row">
             <p className="kd-hero-copy">
-              Every dentist, every date, every deadline, every funeral — a life, in rows. Stanley reads
-              yours very carefully, learns the person it describes, and then, politely, refuses to let
-              your week ruin them.
+              Every dentist, every date, every deadline, every goodbye — a life, in rows. Stanley reads
+              yours very carefully, learns the person it describes, and then, politely, keeps the week
+              from getting the better of you.
             </p>
             <div className="kd-hero-cta">
               <Link href="/demo" className="kd-btn">Employ Stanley</Link>
@@ -136,7 +136,7 @@ export default function Landing() {
               <span>
                 YOUR YEAR, AS STANLEY SEES IT<span className="cells"> · 371 CELLS</span>
               </span>
-              <span className="lit">■ = A THING YOU REFUSED TO FORGET</span>
+              <span className="lit">■ = A THING YOU’D RATHER NOT FORGET</span>
             </div>
             <YearGrid count={371} lit={LIT_DESKTOP} className="kd-yeargrid" />
             <YearGrid count={168} lit={LIT_MOBILE} className="kd-yeargrid-m" />
@@ -253,7 +253,7 @@ export default function Landing() {
           <div className="kd-interlude-inner">
             <div className="kd-ask">ASK YOURSELF</div>
             <div className="kd-interlude-q">
-              What do you put in a calendar? <span className="shout">The things you refuse to forget.</span>
+              What do you put in a calendar? <span className="shout">The things you’d rather not forget.</span>
             </div>
           </div>
         </section>
@@ -261,9 +261,9 @@ export default function Landing() {
         {/* CTA */}
         <section id="cta" className="kd-cta">
           <h2>
-            Give Stanley the keys
+            Give Stanley the week.
             <br />
-            to your <em>days.</em>
+            He’ll give most of it <em>back.</em>
           </h2>
           <Link href="/demo" className="kd-btn">Employ Stanley →</Link>
           <div className="kd-cta-foot">HE PROPOSES. YOU DECIDE. THE LEDGER REMEMBERS. THE TEA IS HIS OWN.</div>
