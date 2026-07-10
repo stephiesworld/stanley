@@ -41,13 +41,18 @@ message when one is given.
   "I've got the week from here" was rejected). NOT precise/spreadsheet-y,
   clipped, anxious/hovering, mock-formal, or a feelings-corrector.
 - Model: claude-sonnet-4-6, max_tokens 1000, system prompt cached.
-- Visual brand (chosen June 29): **"Gentleman's club"** — deep racing green
-  (`--ink #122019`), brass (`#c9a24b`/`#e3c97e`), oxblood (`#6e2a2a`), cream
-  (`#efe7d6`); Fraunces display serif for wordmark + headings; brass monogram
-  "S" crest. Defined in `web/app/globals.css` `:root` + `.brand`/`.crest`.
-  Stanley reads as an old-world British butler, not a SaaS dashboard.
+- Visual brand (redesigned July 10, from Stephie's design handoff — spec kept
+  in `design/keeper-of-days/`): **"Keeper of Days"** — warm near-black
+  (`#0E0D0B`), hairlines (`#2A2721`), cream-white (`#F2EFE6`), signal accent
+  (`#FF4D2E`; approved alternates `#D8FF3E`/`#3E8BFF`/`#FFB13E`); Archivo 900
+  uppercase display + Space Mono for every label/ledger/chat line; no border
+  radius except chat bubbles, no shadows, everything hairlines and rectangles.
+  Concept: "a calendar is the only honest autobiography." Defined in
+  `web/app/keeper.css` (`.kd-*` landing, `.kdc-*` console). Handoff copy is
+  design-final — do not paraphrase it. The old gentleman's-club tokens remain
+  in `globals.css` only for the `/console` voice tool.
 
-## State (June 29, 2026)
+## State (July 10, 2026)
 
 - Voice: passed the 12-probe battery; register defined by the sample
   exchanges in the soul file.
@@ -69,11 +74,15 @@ message when one is given.
     the zero-account local fallback. Tokens AES-256-GCM encrypted at rest.
   - Crons (`vercel.json`): morning/evening briefings + nightly distillation
     (Episode Log → Quirks Profile, `lib/distill.ts`).
-  - **`/demo`**: stateless, no-setup interactive simulator (chat + live mock
-    calendar that animates on a confirmed write) — the "hiring managers can
-    use it now" surface while A2P registration is pending. `/console` keeps
-    the voice-testing tool.
-- Blocked on Stephie's accounts to go fully live: a Telegram bot (@BotFather,
-  free, minutes), Google Cloud OAuth, Supabase. Code is done and building; just
-  needs env vars + `npm run telegram:setup` after deploy.
+  - **`/demo` is the Stanley Console** (July 10 redesign): fixed sample week
+    (6–12 Jul 2026), two scripted proposals (SVC-0121/0122) carry the opening
+    choreography, and the murmur chat runs the REAL brain (`/api/demo` —
+    same propose→confirm→write gate, browser-owned mock calendar; the API
+    returns `pendingSummary` so extracted proposals render as SAY THE WORD /
+    NOT QUITE cards). Still stateless, still the "hiring managers can use it
+    now" surface. `/console` keeps the voice-testing tool (old brand).
+- **Live in production** since June 30: https://stanley-butler.vercel.app
+  (Vercel project `web` + Supabase; Telegram bot @StanleyBearBot). Deploy with
+  `vercel --cwd web --prod --yes`, then re-point the alias:
+  `vercel alias set <new-deployment> stanley-butler.vercel.app`.
 - Stripe last. No autonomous calendar writes, ever, in v1.

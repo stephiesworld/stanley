@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:ital,wght@0,400;0,600;0,800;0,900;1,400;1,800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0D0B; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes cellPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes ledgerScroll { from { transform: translateY(0); } to { transform: translateY(-50%); } }
+  @keyframes cursorBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes floatIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</helmet>
+
+<div style="background: #0E0D0B; color: #F2EFE6; font-family: 'Archivo', sans-serif; min-height: 100vh;">
+  <div style="max-width: 1440px; margin: 0 auto;">
+
+    <!-- nav -->
+    <div data-screen-label="Nav" style="display: flex; align-items: center; justify-content: space-between; padding: 24px 56px; border-bottom: 1px solid #2A2721; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 1px;">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <div style="width: 12px; height: 12px; background: {{ accent }};"></div>
+        <span style="font-weight: 700;">STANLEY</span>
+        <span style="color: #6B675C;">/ KEEPER OF DAYS</span>
+      </div>
+      <div style="display: flex; gap: 32px; color: #6B675C;">
+        <a href="#ledger">THE LEDGER</a>
+        <a href="#manner">THE MANNER</a>
+        <a href="#service">THE SERVICE</a>
+        <a href="#cta" style="color: {{ accent }};">EMPLOY HIM →</a>
+      </div>
+    </div>
+
+    <!-- hero -->
+    <div data-screen-label="Hero" style="padding: 96px 56px 72px; position: relative;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 3px; color: {{ accent }}; margin-bottom: 28px;">A BUTLER, TECHNICALLY. A BIOGRAPHER, REALLY.</div>
+      <h1 style="font-size: 116px; line-height: 0.94; margin: 0 0 40px; font-weight: 900; letter-spacing: -3px; text-transform: uppercase; max-width: 1300px;">A calendar is the only honest <span style="font-style: italic; font-weight: 800; color: {{ accent }};">autobiography.</span></h1>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: end;">
+        <p style="font-size: 24px; line-height: 1.5; margin: 0; color: #B8B3A6; font-weight: 400;">Every dentist, every date, every deadline, every funeral — a life, in rows. Stanley reads yours very carefully, learns the person it describes, and then, politely, refuses to let your week ruin them.</p>
+        <div style="display: flex; flex-direction: column; gap: 16px; align-items: flex-start;">
+          <a href="#cta" style="background: {{ accent }}; color: #0E0D0B; font-weight: 900; font-size: 18px; letter-spacing: 1px; padding: 20px 44px; text-transform: uppercase; display: inline-block;">Employ Stanley</a>
+          <span style="font-family: 'Space Mono', monospace; font-size: 13px; color: #6B675C;">he reads before he touches. he asks before he moves. always.<span style="display: inline-block; width: 9px; height: 16px; background: {{ accent }}; margin-left: 6px; vertical-align: middle; animation: cursorBlink 1.1s step-end infinite;"></span></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- quip ticker -->
+    <div style="border-top: 1px solid #2A2721; border-bottom: 1px solid #2A2721; overflow: hidden; padding: 16px 0;">
+      <div style="display: flex; width: max-content; animation: marquee {{ tickerDuration }} linear infinite; font-family: 'Space Mono', monospace; font-size: 15px; white-space: nowrap; color: #B8B3A6;">
+        <span style="padding-right: 60px;">{{ quipLine }}</span>
+        <span style="padding-right: 60px;">{{ quipLine }}</span>
+      </div>
+    </div>
+
+    <!-- year grid -->
+    <div data-screen-label="Year grid" style="padding: 88px 56px;">
+      <div style="border: 1px solid #2A2721; padding: 40px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 24px; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #6B675C;">
+          <span>YOUR YEAR, AS STANLEY SEES IT · 371 CELLS</span>
+          <span style="color: {{ accent }};">■ = A THING YOU REFUSED TO FORGET</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(53, 1fr); gap: 5px;">
+          <sc-for list="{{ yearCells }}" as="cell" hint-placeholder-count="106">
+            <div style="aspect-ratio: 1; background: {{ cell.bg }}; animation: {{ cell.anim }};"></div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-wrap: wrap; gap: 12px 36px; margin-top: 28px; font-family: 'Space Mono', monospace; font-size: 13px; color: #B8B3A6;">
+          <sc-for list="{{ cellLegend }}" as="leg" hint-placeholder-count="5">
+            <span><span style="color: {{ accent }};">■ {{ leg.cell }}</span> — {{ leg.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- ledger scroll -->
+    <div id="ledger" data-screen-label="Ledger" style="display: grid; grid-template-columns: 1fr 1.1fr; border-top: 1px solid #2A2721;">
+      <div style="padding: 88px 56px; border-right: 1px solid #2A2721; display: flex; flex-direction: column; gap: 24px; justify-content: center;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 3px; color: {{ accent }};">02 — THE LEDGER</div>
+        <h2 style="font-size: 64px; line-height: 0.98; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">One repository holds everything.</h2>
+        <p style="font-size: 20px; line-height: 1.55; color: #B8B3A6; margin: 0;">Work next to love next to bloodwork next to the stag do. No other system holds a whole person. Stanley starts here — not with your inbox, with your <span style="font-style: italic; color: #F2EFE6;">days</span>. He reads them the way a good butler reads a household: quietly, completely, and with opinions he keeps to himself until asked.</p>
+      </div>
+      <div style="height: 640px; overflow: hidden; position: relative; background: #12110E;">
+        <div style="display: flex; flex-direction: column; animation: ledgerScroll 26s linear infinite;">
+          <sc-for list="{{ ledgerLoop }}" as="row" hint-placeholder-count="10">
+            <div style="display: grid; grid-template-columns: 130px 1fr auto; gap: 24px; padding: 22px 40px; border-bottom: 1px solid #221F1A; font-family: 'Space Mono', monospace; font-size: 15px; align-items: baseline;">
+              <span style="color: {{ accent }};">{{ row.time }}</span>
+              <span style="color: #F2EFE6;">{{ row.text }}<span style="display: block; color: #6B675C; font-size: 13px; font-style: italic; margin-top: 4px;">{{ row.note }}</span></span>
+              <span style="color: #6B675C; font-size: 12px; letter-spacing: 2px;">{{ row.tag }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="position: absolute; top: 0; left: 0; right: 0; height: 90px; background: linear-gradient(#0E0D0B, transparent);"></div>
+        <div style="position: absolute; bottom: 0; left: 0; right: 0; height: 90px; background: linear-gradient(transparent, #0E0D0B);"></div>
+      </div>
+    </div>
+
+    <!-- the manner -->
+    <div id="manner" data-screen-label="The manner" style="border-top: 1px solid #2A2721; padding: 88px 56px; display: grid; grid-template-columns: 0.9fr 1.1fr; gap: 60px; align-items: center;">
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 3px; color: {{ accent }};">03 — THE MANNER</div>
+        <h2 style="font-size: 64px; line-height: 0.98; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">He never nags. He <span style="font-style: italic; color: {{ accent }};">murmurs.</span></h2>
+        <p style="font-size: 20px; line-height: 1.55; color: #B8B3A6; margin: 0;">One quiet message when the week starts tipping. Never a dashboard. Never a notification storm. Just a butler, clearing his throat.</p>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <sc-for list="{{ chats }}" as="msg" hint-placeholder-count="4">
+          <div style="align-self: {{ msg.align }}; max-width: 480px; background: {{ msg.bg }}; color: {{ msg.fg }}; border: 1px solid {{ msg.border }}; border-radius: {{ msg.radius }}; padding: 16px 20px; font-size: 17px; line-height: 1.45; font-family: 'Space Mono', monospace; animation: floatIn 0.6s ease both; animation-delay: {{ msg.delay }};">{{ msg.text }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- acts of service -->
+    <div id="service" data-screen-label="The service" style="border-top: 1px solid #2A2721; padding: 88px 56px;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 3px; color: {{ accent }}; margin-bottom: 20px;">04 — THE SERVICE</div>
+      <h2 style="font-size: 64px; line-height: 0.98; margin: 0 0 16px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px; max-width: 1100px;">He learns you by serving you.</h2>
+      <p style="font-size: 20px; line-height: 1.55; color: #B8B3A6; margin: 0 0 52px; max-width: 720px;">Not by profiling. By proposing — and being told yes, no, or “close, but Thursdays are sacred.” Every correction makes him a better butler. The service log is the curriculum.</p>
+      <div style="display: flex; flex-direction: column; border: 1px solid #2A2721;">
+        <sc-for list="{{ serviceLog }}" as="log" hint-placeholder-count="4">
+          <div style="display: grid; grid-template-columns: 200px 1fr 1fr 160px; gap: 28px; padding: 28px 36px; border-bottom: 1px solid #221F1A; align-items: baseline;">
+            <span style="font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px; color: #6B675C;">{{ log.id }}</span>
+            <span style="font-size: 18px; color: #B8B3A6;"><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px;">OBSERVED&nbsp;&nbsp;</span>{{ log.observed }}</span>
+            <span style="font-size: 18px; color: #F2EFE6;"><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px;">PROPOSED&nbsp;&nbsp;</span>{{ log.proposed }}</span>
+            <span style="font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px; color: {{ accent }}; text-align: right;">{{ log.status }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- statement interlude -->
+    <div data-screen-label="Interlude" style="border-top: 1px solid #2A2721; padding: 120px 56px; text-align: center; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 50%; left: 50%; width: 700px; height: 700px; margin: -350px 0 0 -350px; border: 1px dashed #2A2721; border-radius: 50%; animation: spinSlow 60s linear infinite;"></div>
+      <div style="position: relative; display: flex; flex-direction: column; gap: 20px; align-items: center;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 14px; letter-spacing: 3px; color: #6B675C;">ASK YOURSELF</div>
+        <div style="font-size: 72px; font-weight: 400; font-style: italic; line-height: 1.1; max-width: 1000px;">What do you put in a calendar? <span style="color: {{ accent }}; font-weight: 800; font-style: normal; text-transform: uppercase;">The things you refuse to forget.</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div id="cta" data-screen-label="CTA" style="border-top: 1px solid #2A2721; padding: 110px 56px; text-align: center; display: flex; flex-direction: column; gap: 32px; align-items: center;">
+      <h2 style="font-size: 96px; line-height: 0.95; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -2px;">Give Stanley the keys<br>to your <span style="color: {{ accent }}; font-style: italic;">days.</span></h2>
+      <a href="#cta" style="background: {{ accent }}; color: #0E0D0B; font-weight: 900; font-size: 20px; letter-spacing: 1px; padding: 24px 56px; text-transform: uppercase; display: inline-block;">Employ Stanley →</a>
+      <div style="font-family: 'Space Mono', monospace; font-size: 13px; color: #6B675C; letter-spacing: 2px;">HE PROPOSES. YOU DECIDE. THE LEDGER REMEMBERS. THE TEA IS HIS OWN.</div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FF4D2E&quot;, &quot;options&quot;: [&quot;#FF4D2E&quot;, &quot;#D8FF3E&quot;, &quot;#3E8BFF&quot;, &quot;#FFB13E&quot;], &quot;tsType&quot;: &quot;string&quot;}, &quot;tickerSeconds&quot;: {&quot;editor&quot;: &quot;range&quot;, &quot;default&quot;: 30, &quot;min&quot;: 10, &quot;max&quot;: 60, &quot;step&quot;: 5, &quot;unit&quot;: &quot;s&quot;, &quot;tsType&quot;: &quot;number&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#FF4D2E';
+    const tickerDuration = (this.props.tickerSeconds ?? 30) + 's';
+
+    const quips = [
+      '“Might I suggest not booking leg day the morning after the wedding, sir.”',
+      '“Your mother\u2019s birthday is Thursday. I\u2019ve drafted three excuses and one gift idea.”',
+      '“Two \u2018quick syncs\u2019 rarely are, madam.”',
+      '“I\u2019ve protected your Sunday. It fought back. I won.”',
+      '“Dinner with Alex AND drinks with Sam? Bold. Reckless, even.”',
+      '“The dentist at 9, the investor at 10. I\u2019d swap them. Numb is no way to pitch.”',
+    ];
+    const quipLine = quips.join('   ✦   ') + '   ✦   ';
+
+    const litMap = {
+      23: 4.2, 37: 3.1, 58: 5.0, 84: 2.6, 96: 3.8, 121: 4.6, 133: 2.9, 150: 3.4,
+      168: 5.2, 187: 2.7, 203: 4.0, 219: 3.6, 240: 2.8, 258: 4.4, 271: 3.2,
+      289: 5.4, 301: 2.5, 320: 3.9, 341: 4.8, 358: 3.0, 12: 3.5, 66: 4.1,
+      110: 2.4, 226: 5.1, 310: 3.7, 365: 4.3,
+    };
+    const yearCells = [];
+    for (let i = 0; i < 371; i++) {
+      const lit = litMap[i];
+      yearCells.push({
+        bg: lit ? accent : '#221F1A',
+        anim: lit ? ('cellPulse ' + lit + 's ease-in-out infinite') : 'none',
+      });
+    }
+    const cellLegend = [
+      { cell: '037', label: 'the first date — he booked nothing after 10pm since' },
+      { cell: '121', label: 'the marathon — taper week was his idea' },
+      { cell: '203', label: 'dad\u2019s surgery, all clear — the week he cancelled everything, once asked' },
+      { cell: '289', label: 'the job offer — he cleared the runway' },
+      { cell: '358', label: 'everyone home for christmas — protected since october' },
+    ];
+
+    const ledger = [
+      { time: 'MON 09:00', text: 'Interview — the job you almost didn\u2019t apply for', tag: 'WORK', note: 'stanley: I pressed. Gently. You\u2019re welcome.' },
+      { time: 'TUE 19:30', text: 'Dinner w/ R. — third date, the good tapas place', tag: 'LOVE', note: 'stanley: I moved your 6pm. You never knew it existed.' },
+      { time: 'WED 07:15', text: 'Bloodwork, fasting', tag: 'HEALTH', note: 'stanley: fourth booking. This one stands, sir.' },
+      { time: 'THU 18:00', text: 'Call mum', tag: 'FAMILY', note: 'stanley: immovable. As agreed. As it should be.' },
+      { time: 'FRI 20:00', text: 'Dan\u2019s stag — you are the best man, act like it', tag: 'MATES', note: 'stanley: Saturday has been emptied. Preemptively.' },
+      { time: 'SAT 10:00', text: 'Flat viewings ×3 — the one with the light', tag: 'BIG', note: 'stanley: I mapped the route. The good one is second.' },
+      { time: 'SUN —', text: 'Nothing. Deliberately, gloriously nothing.', tag: 'REST', note: 'stanley: it fought back. I won.' },
+      { time: 'MON 14:00', text: 'Therapy — the standing one', tag: 'HEALTH', note: 'stanley: never touched. Never will be.' },
+      { time: 'WED 12:30', text: 'Lunch w/ former boss', tag: 'WORK', note: 'stanley: bridges want warming, sir.' },
+      { time: 'FRI 09:00', text: 'Sign the lease — the one with the light', tag: 'BIG', note: 'stanley: I took the liberty of feeling pleased.' },
+    ];
+    const ledgerLoop = ledger.concat(ledger);
+
+    const chats = [
+      { text: 'Good morning. Wednesday is attempting to have four meetings and a dentist. Shall I intervene?', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '14px 14px 14px 4px', delay: '0.1s' },
+      { text: 'yes please', align: 'flex-end', bg: accent, fg: '#0E0D0B', border: accent, radius: '14px 14px 4px 14px', delay: '0.35s' },
+      { text: 'Dentist moved to Friday 9am. The 3pm sync agreed to become an email, as most syncs should. Wednesday breathes again.', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '14px 14px 14px 4px', delay: '0.6s' },
+      { text: 'Also — your anniversary is in 9 days. I have thoughts. Only when you\u2019re ready.', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '14px 14px 14px 4px', delay: '0.85s' },
+    ];
+
+    const serviceLog = [
+      { id: 'SVC-0117', observed: 'You cancel every Friday-morning meeting, eventually.', proposed: 'Stop booking them. Fridays open at noon.', status: 'APPROVED' },
+      { id: 'SVC-0118', observed: 'Two big nights, back to back, twice a month.', proposed: 'A buffer evening after each. Held, not booked.', status: 'APPROVED' },
+      { id: 'SVC-0119', observed: 'Mum\u2019s call drifts when work runs late.', proposed: 'Thursday 6pm becomes immovable.', status: 'CORRECTED' },
+      { id: 'SVC-0120', observed: 'The check-up has moved four times.', proposed: 'It moves once more — to tomorrow morning.', status: 'PENDING' },
+    ];
+
+    return { accent, tickerDuration, quipLine, yearCells, cellLegend, ledgerLoop, chats, serviceLog };
+  }
+}
+</script>
+</body>
+</html>

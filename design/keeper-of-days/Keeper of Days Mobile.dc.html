@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:ital,wght@0,400;0,600;0,800;0,900;1,400;1,800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #17161A; display: flex; justify-content: center; padding: 48px 0; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  @keyframes cellPulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes cursorBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes spinSlow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+</style>
+</helmet>
+
+<x-import component-from-global-scope="IOSDevice" from="./ios-frame.jsx" dark="{{ true }}" hint-size="430px,880px">
+  <div data-screen-label="Mobile landing" style="height: 100%; overflow-y: auto; background: #0E0D0B; color: #F2EFE6; font-family: 'Archivo', sans-serif;">
+
+    <div style="height: 58px;"></div>
+    <!-- nav -->
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 20px; border-bottom: 1px solid #2A2721; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <div style="width: 10px; height: 10px; background: {{ accent }};"></div>
+        <span style="font-weight: 700;">STANLEY</span>
+      </div>
+      <a href="#m-cta" style="color: {{ accent }};">EMPLOY HIM →</a>
+    </div>
+
+    <!-- hero -->
+    <div style="padding: 44px 20px 36px;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: {{ accent }}; margin-bottom: 18px; line-height: 1.6;">A BUTLER, TECHNICALLY.<br>A BIOGRAPHER, REALLY.</div>
+      <h1 style="font-size: 37px; line-height: 1; margin: 0 0 20px; font-weight: 900; letter-spacing: -1.5px; text-transform: uppercase; overflow-wrap: anywhere;">A calendar is the only honest <span style="font-style: italic; font-weight: 800; color: {{ accent }};">autobiography.</span></h1>
+      <p style="font-size: 16px; line-height: 1.55; margin: 0 0 24px; color: #B8B3A6;">Every dentist, every date, every deadline, every funeral — a life, in rows. Stanley reads yours very carefully, learns the person it describes, and then, politely, refuses to let your week ruin them.</p>
+      <a href="#m-cta" style="background: {{ accent }}; color: #0E0D0B; font-weight: 900; font-size: 15px; letter-spacing: 1px; padding: 16px 0; text-transform: uppercase; display: block; text-align: center;">Employ Stanley</a>
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; color: #6B675C; margin-top: 14px; line-height: 1.6;">he reads before he touches. he asks before he moves. always.<span style="display: inline-block; width: 7px; height: 12px; background: {{ accent }}; margin-left: 5px; vertical-align: middle; animation: cursorBlink 1.1s step-end infinite;"></span></div>
+    </div>
+
+    <!-- ticker -->
+    <div style="border-top: 1px solid #2A2721; border-bottom: 1px solid #2A2721; overflow: hidden; padding: 12px 0;">
+      <div style="display: flex; width: max-content; animation: marquee 40s linear infinite; font-family: 'Space Mono', monospace; font-size: 12px; white-space: nowrap; color: #B8B3A6;">
+        <span style="padding-right: 50px;">{{ quipLine }}</span>
+        <span style="padding-right: 50px;">{{ quipLine }}</span>
+      </div>
+    </div>
+
+    <!-- year grid -->
+    <div style="padding: 40px 20px;">
+      <div style="border: 1px solid #2A2721; padding: 18px;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 1.5px; color: #6B675C; margin-bottom: 14px; line-height: 1.8;">YOUR YEAR, AS STANLEY SEES IT<br><span style="color: {{ accent }};">■ = A THING YOU REFUSED TO FORGET</span></div>
+        <div style="display: grid; grid-template-columns: repeat(28, 1fr); gap: 3px;">
+          <sc-for list="{{ yearCells }}" as="cell" hint-placeholder-count="56">
+            <div style="aspect-ratio: 1; background: {{ cell.bg }}; animation: {{ cell.anim }};"></div>
+          </sc-for>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; font-family: 'Space Mono', monospace; font-size: 11px; color: #B8B3A6; line-height: 1.5;">
+          <sc-for list="{{ cellLegend }}" as="leg" hint-placeholder-count="3">
+            <span><span style="color: {{ accent }};">■ {{ leg.cell }}</span> — {{ leg.label }}</span>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <!-- ledger -->
+    <div style="border-top: 1px solid #2A2721; padding: 40px 20px;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: {{ accent }}; margin-bottom: 14px;">02 — THE LEDGER</div>
+      <h2 style="font-size: 34px; line-height: 1; margin: 0 0 14px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">One repository holds everything.</h2>
+      <p style="font-size: 15px; line-height: 1.55; color: #B8B3A6; margin: 0 0 28px;">Work next to love next to bloodwork next to the stag do. No other system holds a whole person. Stanley starts here — not with your inbox, with your <span style="font-style: italic; color: #F2EFE6;">days</span>.</p>
+      <div style="border: 1px solid #2A2721; background: #12110E;">
+        <sc-for list="{{ ledger }}" as="row" hint-placeholder-count="5">
+          <div style="padding: 14px 16px; border-bottom: 1px solid #221F1A; font-family: 'Space Mono', monospace; display: flex; flex-direction: column; gap: 4px;">
+            <div style="display: flex; justify-content: space-between; font-size: 11px;"><span style="color: {{ accent }};">{{ row.time }}</span><span style="color: #6B675C; letter-spacing: 2px;">{{ row.tag }}</span></div>
+            <span style="font-size: 13px; color: #F2EFE6; line-height: 1.4;">{{ row.text }}</span>
+            <span style="color: #6B675C; font-size: 11px; font-style: italic; line-height: 1.4;">{{ row.note }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- the manner -->
+    <div style="border-top: 1px solid #2A2721; padding: 40px 20px;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: {{ accent }}; margin-bottom: 14px;">03 — THE MANNER</div>
+      <h2 style="font-size: 34px; line-height: 1; margin: 0 0 14px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">He never nags. He <span style="font-style: italic; color: {{ accent }};">murmurs.</span></h2>
+      <p style="font-size: 15px; line-height: 1.55; color: #B8B3A6; margin: 0 0 24px;">One quiet message when the week starts tipping. Never a dashboard. Never a notification storm. Just a butler, clearing his throat.</p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <sc-for list="{{ chats }}" as="msg" hint-placeholder-count="4">
+          <div style="align-self: {{ msg.align }}; max-width: 300px; background: {{ msg.bg }}; color: {{ msg.fg }}; border: 1px solid {{ msg.border }}; border-radius: {{ msg.radius }}; padding: 12px 14px; font-size: 13px; line-height: 1.45; font-family: 'Space Mono', monospace;">{{ msg.text }}</div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- service -->
+    <div style="border-top: 1px solid #2A2721; padding: 40px 20px;">
+      <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: {{ accent }}; margin-bottom: 14px;">04 — THE SERVICE</div>
+      <h2 style="font-size: 34px; line-height: 1; margin: 0 0 14px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">He learns you by serving you.</h2>
+      <p style="font-size: 15px; line-height: 1.55; color: #B8B3A6; margin: 0 0 24px;">Not by profiling. By proposing — and being told yes, no, or “close, but Thursdays are sacred.” The service log is the curriculum.</p>
+      <div style="display: flex; flex-direction: column; border: 1px solid #2A2721;">
+        <sc-for list="{{ serviceLog }}" as="log" hint-placeholder-count="4">
+          <div style="padding: 16px; border-bottom: 1px solid #221F1A; display: flex; flex-direction: column; gap: 8px;">
+            <div style="display: flex; justify-content: space-between; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;"><span style="color: #6B675C;">{{ log.id }}</span><span style="color: {{ accent }};">{{ log.status }}</span></div>
+            <span style="font-size: 14px; color: #B8B3A6; line-height: 1.45;"><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px;">OBSERVED&nbsp;&nbsp;</span>{{ log.observed }}</span>
+            <span style="font-size: 14px; color: #F2EFE6; line-height: 1.45;"><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px;">PROPOSED&nbsp;&nbsp;</span>{{ log.proposed }}</span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- interlude -->
+    <div style="border-top: 1px solid #2A2721; padding: 64px 20px; text-align: center; position: relative; overflow: hidden;">
+      <div style="position: absolute; top: 50%; left: 50%; width: 340px; height: 340px; margin: -170px 0 0 -170px; border: 1px dashed #2A2721; border-radius: 50%; animation: spinSlow 60s linear infinite;"></div>
+      <div style="position: relative; display: flex; flex-direction: column; gap: 12px; align-items: center;">
+        <div style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: #6B675C;">ASK YOURSELF</div>
+        <div style="font-size: 30px; font-weight: 400; font-style: italic; line-height: 1.15;">What do you put in a calendar? <span style="color: {{ accent }}; font-weight: 800; font-style: normal; text-transform: uppercase;">The things you refuse to forget.</span></div>
+      </div>
+    </div>
+
+    <!-- CTA -->
+    <div id="m-cta" style="border-top: 1px solid #2A2721; padding: 56px 20px 72px; text-align: center; display: flex; flex-direction: column; gap: 20px; align-items: center;">
+      <h2 style="font-size: 40px; line-height: 0.98; margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">Give Stanley the keys to your <span style="color: {{ accent }}; font-style: italic;">days.</span></h2>
+      <a href="#m-cta" style="background: {{ accent }}; color: #0E0D0B; font-weight: 900; font-size: 15px; letter-spacing: 1px; padding: 16px 40px; text-transform: uppercase; display: inline-block;">Employ Stanley →</a>
+      <div style="font-family: 'Space Mono', monospace; font-size: 10px; color: #6B675C; letter-spacing: 1.5px; line-height: 1.8;">HE PROPOSES. YOU DECIDE.<br>THE LEDGER REMEMBERS. THE TEA IS HIS OWN.</div>
+    </div>
+
+  </div>
+</x-import>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;: {&quot;width&quot;: &quot;530px&quot;, &quot;height&quot;: &quot;980px&quot;}, &quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FF4D2E&quot;, &quot;options&quot;: [&quot;#FF4D2E&quot;, &quot;#D8FF3E&quot;, &quot;#3E8BFF&quot;, &quot;#FFB13E&quot;], &quot;tsType&quot;: &quot;string&quot;}}">
+class Component extends DCLogic {
+  renderVals() {
+    const accent = this.props.accent ?? '#FF4D2E';
+
+    const quips = [
+      '“Might I suggest not booking leg day the morning after the wedding, sir.”',
+      '“Two \u2018quick syncs\u2019 rarely are, madam.”',
+      '“I\u2019ve protected your Sunday. It fought back. I won.”',
+      '“Dinner with Alex AND drinks with Sam? Bold. Reckless, even.”',
+    ];
+    const quipLine = quips.join('   ✦   ') + '   ✦   ';
+
+    const litMap = { 8: 3.5, 23: 4.2, 37: 3.1, 58: 5.0, 71: 2.6, 96: 3.8, 109: 4.6, 121: 2.9, 133: 3.4, 150: 5.2, 161: 2.7 };
+    const yearCells = [];
+    for (let i = 0; i < 168; i++) {
+      const lit = litMap[i];
+      yearCells.push({ bg: lit ? accent : '#221F1A', anim: lit ? ('cellPulse ' + lit + 's ease-in-out infinite') : 'none' });
+    }
+    const cellLegend = [
+      { cell: '037', label: 'the first date — he booked nothing after 10pm since' },
+      { cell: '109', label: 'dad\u2019s surgery, all clear — he cancelled everything, once asked' },
+      { cell: '150', label: 'the job offer — he cleared the runway' },
+    ];
+
+    const ledger = [
+      { time: 'MON 09:00', text: 'Interview — the job you almost didn\u2019t apply for', tag: 'WORK', note: 'stanley: I pressed. Gently. You\u2019re welcome.' },
+      { time: 'TUE 19:30', text: 'Dinner w/ R. — the good tapas place', tag: 'LOVE', note: 'stanley: I moved your 6pm. You never knew it existed.' },
+      { time: 'THU 18:00', text: 'Call mum', tag: 'FAMILY', note: 'stanley: immovable. As agreed. As it should be.' },
+      { time: 'FRI 20:00', text: 'Dan\u2019s stag — you are the best man, act like it', tag: 'MATES', note: 'stanley: Saturday has been emptied. Preemptively.' },
+      { time: 'SUN —', text: 'Nothing. Deliberately, gloriously nothing.', tag: 'REST', note: 'stanley: it fought back. I won.' },
+    ];
+
+    const chats = [
+      { text: 'Good morning. Wednesday is attempting to have four meetings and a dentist. Shall I intervene?', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '12px 12px 12px 4px' },
+      { text: 'yes please', align: 'flex-end', bg: accent, fg: '#0E0D0B', border: accent, radius: '12px 12px 4px 12px' },
+      { text: 'Dentist moved to Friday 9am. The 3pm sync agreed to become an email, as most syncs should.', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '12px 12px 12px 4px' },
+      { text: 'Also — your anniversary is in 9 days. I have thoughts. Only when you\u2019re ready.', align: 'flex-start', bg: '#181611', fg: '#F2EFE6', border: '#2A2721', radius: '12px 12px 12px 4px' },
+    ];
+
+    const serviceLog = [
+      { id: 'SVC-0117', observed: 'You cancel every Friday-morning meeting, eventually.', proposed: 'Stop booking them. Fridays open at noon.', status: 'APPROVED' },
+      { id: 'SVC-0118', observed: 'Two big nights, back to back, twice a month.', proposed: 'A buffer evening after each. Held, not booked.', status: 'APPROVED' },
+      { id: 'SVC-0119', observed: 'Mum\u2019s call drifts when work runs late.', proposed: 'Thursday 6pm becomes immovable.', status: 'CORRECTED' },
+    ];
+
+    return { accent, quipLine, yearCells, cellLegend, ledger, chats, serviceLog };
+  }
+}
+</script>
+</body>
+</html>

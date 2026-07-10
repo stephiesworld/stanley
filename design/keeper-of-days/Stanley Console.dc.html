@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Archivo:ital,wght@0,400;0,600;0,800;0,900;1,400;1,800&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #0E0D0B; }
+  a { color: inherit; text-decoration: none; }
+  a:hover { opacity: 0.85; }
+  @keyframes cursorBlink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+  @keyframes floatIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes pulseDot { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+  ::-webkit-scrollbar { width: 8px; }
+  ::-webkit-scrollbar-track { background: #12110E; }
+  ::-webkit-scrollbar-thumb { background: #2A2721; }
+</style>
+</helmet>
+
+<div data-screen-label="Console" style="background: #0E0D0B; color: #F2EFE6; font-family: 'Archivo', sans-serif; height: 100vh; display: flex; flex-direction: column; overflow: hidden;">
+
+  <!-- top bar -->
+  <div style="display: flex; align-items: center; justify-content: space-between; padding: 16px 28px; border-bottom: 1px solid #2A2721; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 1px; flex: 0 0 auto;">
+    <div style="display: flex; align-items: center; gap: 14px;">
+      <div style="width: 10px; height: 10px; background: {{ accent }};"></div>
+      <span style="font-weight: 700;">STANLEY</span>
+      <span style="color: #6B675C;">/ THE CONSOLE</span>
+    </div>
+    <div style="display: flex; align-items: center; gap: 24px; color: #6B675C;">
+      <span>WEEK OF 6 JUL 2026</span>
+      <span style="display: flex; align-items: center; gap: 8px;"><span style="width: 8px; height: 8px; border-radius: 50%; background: {{ accent }}; animation: pulseDot 2s ease-in-out infinite;"></span><span style="color: {{ weekStatusColor }};">{{ weekStatus }}</span></span>
+    </div>
+  </div>
+
+  <div style="display: flex; flex: 1; min-height: 0;">
+
+    <!-- left rail -->
+    <div style="width: 220px; flex: 0 0 auto; border-right: 1px solid #2A2721; padding: 24px 0; display: flex; flex-direction: column; gap: 4px; font-family: 'Space Mono', monospace; font-size: 13px; letter-spacing: 2px;">
+      <sc-for list="{{ navItems }}" as="nav" hint-placeholder-count="4">
+        <div onClick="{{ nav.onClick }}" style="padding: 12px 28px; color: {{ nav.color }}; border-left: 2px solid {{ nav.border }}; cursor: pointer;" style-hover="color: #F2EFE6;">{{ nav.label }}</div>
+      </sc-for>
+      <div style="flex: 1;"></div>
+      <div style="padding: 20px 28px; border-top: 1px solid #221F1A; color: #6B675C; font-size: 12px; line-height: 1.7;">
+        LEANINGS LEARNED<br><span style="color: #F2EFE6; font-size: 22px; font-family: 'Archivo', sans-serif; font-weight: 900;">{{ leaningsCount }}</span><br>
+        CORRECTIONS TAKEN<br><span style="color: {{ accent }}; font-size: 22px; font-family: 'Archivo', sans-serif; font-weight: 900;">{{ correctionsCount }}</span>
+      </div>
+    </div>
+
+    <!-- center: week or ledger -->
+    <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; overflow: hidden;">
+      <sc-if value="{{ showWeek }}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 24px 28px 12px; display: flex; justify-content: space-between; align-items: baseline;">
+          <h1 style="margin: 0; font-size: 34px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">The week</h1>
+          <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #6B675C;">HE READS. HE PROPOSES. YOU DECIDE.</span>
+        </div>
+        <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(7, 1fr); gap: 1px; background: #221F1A; border-top: 1px solid #221F1A; overflow-y: auto;">
+          <sc-for list="{{ days }}" as="day" hint-placeholder-count="7">
+            <div style="background: {{ day.bg }}; padding: 16px 12px; display: flex; flex-direction: column; gap: 10px; min-height: 300px;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline;">
+                <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #6B675C;">{{ day.name }}</span>
+                <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 1px; color: {{ day.badgeColor }};">{{ day.badge }}</span>
+              </div>
+              <sc-for list="{{ day.events }}" as="ev" hint-placeholder-count="2">
+                <div style="border: 1px solid {{ ev.border }}; background: {{ ev.bg }}; padding: 10px 12px; display: flex; flex-direction: column; gap: 4px; opacity: {{ ev.opacity }}; animation: floatIn 0.4s ease both;">
+                  <span style="font-family: 'Space Mono', monospace; font-size: 11px; color: {{ ev.timeColor }};">{{ ev.time }}</span>
+                  <span style="font-size: 14px; font-weight: 600; line-height: 1.3; color: {{ ev.fg }}; text-decoration: {{ ev.deco }};">{{ ev.title }}</span>
+                  <span style="font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 2px; color: #6B675C;">{{ ev.tag }}</span>
+                </div>
+              </sc-for>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+      <sc-if value="{{ showLedger }}" hint-placeholder-val="{{ false }}">
+        <div style="padding: 24px 28px 12px; display: flex; justify-content: space-between; align-items: baseline;">
+          <h1 style="margin: 0; font-size: 34px; font-weight: 900; text-transform: uppercase; letter-spacing: -1px;">Service log</h1>
+          <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #6B675C;">THE CURRICULUM</span>
+        </div>
+        <div style="flex: 1; overflow-y: auto; border-top: 1px solid #221F1A;">
+          <sc-for list="{{ serviceLog }}" as="log" hint-placeholder-count="4">
+            <div style="display: grid; grid-template-columns: 130px 1fr 130px; gap: 20px; padding: 20px 28px; border-bottom: 1px solid #221F1A; align-items: baseline; animation: floatIn 0.4s ease both;">
+              <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #6B675C;">{{ log.id }}</span>
+              <span style="font-size: 15px; color: #B8B3A6; line-height: 1.5;"><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;">OBSERVED&nbsp;&nbsp;</span>{{ log.observed }}<br><span style="color: #6B675C; font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px;">PROPOSED&nbsp;&nbsp;</span><span style="color: #F2EFE6;">{{ log.proposed }}</span></span>
+              <span style="font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: {{ log.statusColor }}; text-align: right;">{{ log.status }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- right: the murmur -->
+    <div style="width: 400px; flex: 0 0 auto; border-left: 1px solid #2A2721; display: flex; flex-direction: column; background: #12110E;">
+      <div style="padding: 18px 24px; border-bottom: 1px solid #221F1A; font-family: 'Space Mono', monospace; font-size: 12px; letter-spacing: 2px; color: #6B675C; display: flex; justify-content: space-between;">
+        <span>THE MURMUR</span>
+        <span style="color: {{ accent }};">STANLEY IS READING</span>
+      </div>
+      <div style="flex: 1; overflow-y: auto; padding: 20px 20px 8px; display: flex; flex-direction: column; gap: 12px;">
+        <sc-for list="{{ messages }}" as="msg" hint-placeholder-count="3">
+          <div style="align-self: {{ msg.align }}; max-width: 320px; background: {{ msg.bg }}; color: {{ msg.fg }}; border: 1px solid {{ msg.border }}; border-radius: {{ msg.radius }}; padding: 12px 16px; font-size: 14px; line-height: 1.5; font-family: 'Space Mono', monospace; animation: floatIn 0.4s ease both;">{{ msg.text }}</div>
+        </sc-for>
+        <sc-for list="{{ pendingProposals }}" as="prop" hint-placeholder-count="1">
+          <div style="border: 1px solid {{ accent }}; padding: 16px; display: flex; flex-direction: column; gap: 12px; animation: floatIn 0.4s ease both;">
+            <span style="font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 2px; color: {{ accent }};">PROPOSAL · {{ prop.id }}</span>
+            <span style="font-size: 15px; line-height: 1.5; font-family: 'Space Mono', monospace;">{{ prop.text }}</span>
+            <div style="display: flex; gap: 10px;">
+              <button onClick="{{ prop.approve }}" style="flex: 1; background: {{ accent }}; color: #0E0D0B; border: none; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; padding: 12px; cursor: pointer;">SAY THE WORD</button>
+              <button onClick="{{ prop.correct }}" style="flex: 1; background: transparent; color: #B8B3A6; border: 1px solid #2A2721; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; letter-spacing: 1px; padding: 12px; cursor: pointer;" style-hover="border-color: #B8B3A6; color: #F2EFE6;">NOT QUITE</button>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <div style="padding: 16px 20px; border-top: 1px solid #221F1A; display: flex; gap: 10px; align-items: center;">
+        <input value="{{ draft }}" onChange="{{ onDraft }}" onKeyDown="{{ onKey }}" placeholder="a word in his ear…" style="flex: 1; background: #0E0D0B; border: 1px solid #2A2721; color: #F2EFE6; font-family: 'Space Mono', monospace; font-size: 14px; padding: 12px 14px; outline: none;">
+        <button onClick="{{ onSend }}" style="background: transparent; border: 1px solid {{ accent }}; color: {{ accent }}; font-family: 'Space Mono', monospace; font-weight: 700; font-size: 13px; padding: 12px 16px; cursor: pointer;" style-hover="background: {{ accent }}; color: #0E0D0B;">→</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;: {&quot;editor&quot;: &quot;color&quot;, &quot;default&quot;: &quot;#FF4D2E&quot;, &quot;options&quot;: [&quot;#FF4D2E&quot;, &quot;#D8FF3E&quot;, &quot;#3E8BFF&quot;, &quot;#FFB13E&quot;], &quot;tsType&quot;: &quot;string&quot;}}">
+class Component extends DCLogic {
+  state = {
+    view: 'week',
+    draft: '',
+    p1: 'pending', // wednesday rescue
+    p2: 'hidden',  // anniversary — appears after p1 resolves
+    extraMessages: [],
+    extraLog: [],
+    replyIdx: 0,
+  };
+
+  say(text, from) {
+    this.setState(s => ({ extraMessages: s.extraMessages.concat([{ text, from: from || 'stanley' }]) }));
+  }
+
+  renderVals() {
+    const accent = this.props.accent ?? '#FF4D2E';
+    const S = this.state;
+    const dim = '#6B675C', panel = '#181611', line = '#2A2721';
+
+    const stanleyMsg = (text) => ({ text, align: 'flex-start', bg: panel, fg: '#F2EFE6', border: line, radius: '12px 12px 12px 4px' });
+    const youMsg = (text) => ({ text, align: 'flex-end', bg: accent, fg: '#0E0D0B', border: accent, radius: '12px 12px 4px 12px' });
+
+    // ---- week data, derived from proposal state ----
+    const p1Done = S.p1 === 'approved';
+    const p1Corrected = S.p1 === 'corrected';
+    const ev = (time, title, tag, opts) => Object.assign({
+      time, title, tag,
+      border: line, bg: '#0E0D0B', fg: '#F2EFE6', timeColor: dim, deco: 'none', opacity: 1,
+    }, opts || {});
+
+    const wedEvents = [
+      ev('09:00', 'Stand-up', 'WORK'),
+      ev('11:00', 'Design review', 'WORK'),
+      ev('13:00', 'Quick sync', 'WORK', p1Done ? { deco: 'line-through', opacity: 0.45, title: 'Quick sync → became an email' } : {}),
+      ev('15:00', 'Quick sync, the sequel', 'WORK'),
+    ];
+    if (!p1Done) wedEvents.push(ev('16:30', 'Dentist', 'HEALTH', { border: accent, timeColor: accent }));
+
+    const friEvents = [ev('20:00', 'Dan\u2019s stag — you are the best man, act like it', 'MATES')];
+    if (p1Done) friEvents.unshift(ev('09:00', 'Dentist (moved by Stanley, with permission)', 'HEALTH', { border: accent, timeColor: accent }));
+
+    const days = [
+      { name: 'MON', badge: '', events: [ev('09:00', 'Interview — the job you almost didn\u2019t apply for', 'WORK'), ev('14:00', 'Therapy — the standing one', 'HEALTH')] },
+      { name: 'TUE', badge: '', events: [ev('19:30', 'Dinner w/ R. — the good tapas place', 'LOVE', { border: accent, timeColor: accent })] },
+      { name: 'WED', badge: p1Done ? 'BREATHING' : 'TIPPING', badgeColor: p1Done ? '#B8B3A6' : accent, bg: p1Done ? '#0E0D0B' : '#181310', events: wedEvents },
+      { name: 'THU', badge: 'SACRED 18:00', badgeColor: dim, events: [ev('18:00', 'Call mum — immovable', 'FAMILY')] },
+      { name: 'FRI', badge: '', events: friEvents },
+      { name: 'SAT', badge: 'EMPTIED', badgeColor: dim, events: [ev('—', 'Recovery. Stanley insisted.', 'REST', { fg: '#B8B3A6' })] },
+      { name: 'SUN', badge: 'PROTECTED', badgeColor: dim, events: [ev('—', 'Nothing. Deliberately, gloriously nothing.', 'REST', { fg: '#B8B3A6' })] },
+    ];
+    days.forEach(d => { d.bg = d.bg || '#0E0D0B'; d.badgeColor = d.badgeColor || dim; d.badge = d.badge || ''; });
+
+    // ---- messages ----
+    const messages = [
+      stanleyMsg('Good morning. I\u2019ve read the week. Mostly admirable. One concern.'),
+      stanleyMsg('Wednesday is attempting to have four meetings and a dentist. This is ambitious in the way that icebergs are ambitious.'),
+    ];
+    if (S.p1 === 'approved') {
+      messages.push(youMsg('yes please'));
+      messages.push(stanleyMsg('Done. Dentist to Friday 9am. The 1pm sync agreed to become an email, as most syncs should. Wednesday breathes again.'));
+    }
+    if (S.p1 === 'corrected') {
+      messages.push(youMsg('not quite'));
+      messages.push(stanleyMsg('Understood — I\u2019ve left Wednesday untouched and made a note: you like your chaos artisanal. My proposals will adjust.'));
+    }
+    S.extraMessages.forEach(m => messages.push(m.from === 'you' ? youMsg(m.text) : stanleyMsg(m.text)));
+
+    // ---- proposals ----
+    const pendingProposals = [];
+    if (S.p1 === 'pending') {
+      pendingProposals.push({
+        id: 'SVC-0121',
+        text: 'Dentist \u2192 Friday 9am. The 1pm sync becomes an email. Nothing moves without your word.',
+        approve: () => this.setState({ p1: 'approved', p2: 'pending' }, () => {
+          setTimeout(() => this.say('Also \u2014 your anniversary is in 9 days. Might I hold next Friday evening before someone else claims it?'), 900);
+        }),
+        correct: () => this.setState({ p1: 'corrected', p2: 'pending' }),
+      });
+    }
+    if (S.p2 === 'pending') {
+      pendingProposals.push({
+        id: 'SVC-0122',
+        text: 'Hold next Friday 7pm onward \u2014 \u201canniversary, do not book, do not ask.\u201d I have restaurant thoughts, when you\u2019re ready.',
+        approve: () => this.setState({ p2: 'approved' }, () => {
+          setTimeout(() => this.say('Held. It will appear in the ledger as \u201cthe good kind of immovable.\u201d'), 700);
+        }),
+        correct: () => this.setState({ p2: 'corrected' }, () => {
+          setTimeout(() => this.say('Of course. I\u2019ll merely hover meaningfully near the date.'), 700);
+        }),
+      });
+    }
+
+    // ---- service log ----
+    const serviceLog = [
+      { id: 'SVC-0117', observed: 'You cancel every Friday-morning meeting, eventually.', proposed: 'Stop booking them. Fridays open at noon.', status: 'APPROVED' },
+      { id: 'SVC-0118', observed: 'Two big nights, back to back, twice a month.', proposed: 'A buffer evening after each. Held, not booked.', status: 'APPROVED' },
+      { id: 'SVC-0119', observed: 'Mum\u2019s call drifts when work runs late.', proposed: 'Thursday 6pm becomes immovable.', status: 'CORRECTED' },
+      { id: 'SVC-0120', observed: 'The check-up has moved four times.', proposed: 'It moves once more \u2014 to tomorrow morning.', status: 'PENDING' },
+    ];
+    if (S.p1 !== 'pending') serviceLog.unshift({ id: 'SVC-0121', observed: 'Wednesday: four meetings and a dentist.', proposed: 'Dentist \u2192 Friday. One sync \u2192 email.', status: S.p1.toUpperCase() });
+    if (S.p2 === 'approved' || S.p2 === 'corrected') serviceLog.unshift({ id: 'SVC-0122', observed: 'Anniversary in 9 days. Friday evening exposed.', proposed: 'Hold it. The good kind of immovable.', status: S.p2.toUpperCase() });
+    serviceLog.forEach(l => { l.statusColor = l.status === 'APPROVED' ? accent : (l.status === 'CORRECTED' ? '#B8B3A6' : dim); });
+
+    // ---- stats + nav ----
+    const approvals = serviceLog.filter(l => l.status === 'APPROVED').length;
+    const corrections = serviceLog.filter(l => l.status === 'CORRECTED').length;
+
+    const navItems = ['week', 'log'].map(v => ({
+      label: v === 'week' ? 'THE WEEK' : 'SERVICE LOG',
+      color: S.view === v ? '#F2EFE6' : dim,
+      border: S.view === v ? accent : 'transparent',
+      onClick: () => this.setState({ view: v }),
+    }));
+
+    // ---- chat input ----
+    const replyFor = (text) => {
+      const t = text.toLowerCase();
+      if (/(thank|thanks|cheers|ty\b)/.test(t)) return 'Not at all, sir. It is quite literally my entire personality.';
+      if (/(hi|hello|hey|morning|evening)\b/.test(t)) return 'Good day. The week is on my desk. Shall I read you the concerning parts?';
+      if (/(move|reschedul|shift|swap|push)/.test(t)) return 'I can propose that. Nothing will move until you approve it \u2014 shall I draft it?';
+      if (/(cancel|delete|remove|clear)/.test(t)) return 'I\u2019ll draft the cancellation and the apology. Yours to send, of course.';
+      if (/(free|available|open|when)/.test(t)) return 'Friday opens at noon \u2014 a policy of ours \u2014 and Tuesday evening is suspiciously clear. Suspicious in a good way.';
+      if (/(tired|exhausted|busy|stress|overwhelm)/.test(t)) return 'I had noticed, sir. Might I propose emptying something? You needn\u2019t decide which \u2014 that\u2019s my department.';
+      if (/(sorry|apolog)/.test(t)) return 'Entirely unnecessary. Butlers do not accept apologies, only instructions.';
+      if (/(who are you|what are you|stanley)/.test(t)) return 'A butler, technically. A biographer, really. I read your days and try to be useful about it.';
+      if (/(no|nope|don\u2019t|dont|stop)\b/.test(t)) return 'Understood. Struck from the agenda, retained in the memory.';
+      if (t.endsWith('?')) return 'A fair question. My honest answer: I\u2019d propose something and let you overrule me. It\u2019s how I learn.';
+      return 'Noted, and filed with the leanings. I\u2019ll act on nothing until you say the word.';
+    };
+    const send = () => {
+      const text = S.draft.trim();
+      if (!text) return;
+      this.setState(s => ({ draft: '', extraMessages: s.extraMessages.concat([{ text, from: 'you' }]) }));
+      setTimeout(() => this.say(replyFor(text)), 800);
+    };
+
+    return {
+      accent,
+      weekStatus: (S.p1 === 'approved') ? 'THE WEEK IS BREATHING' : 'THE WEEK IS TIPPING',
+      weekStatusColor: (S.p1 === 'approved') ? '#B8B3A6' : accent,
+      navItems,
+      leaningsCount: 12 + approvals,
+      correctionsCount: corrections,
+      showWeek: S.view === 'week',
+      showLedger: S.view === 'log',
+      days,
+      messages,
+      pendingProposals,
+      serviceLog,
+      draft: S.draft,
+      onDraft: (e) => this.setState({ draft: e.target.value }),
+      onKey: (e) => { if (e.key === 'Enter') send(); },
+      onSend: send,
+    };
+  }
+}
+</script>
+</body>
+</html>

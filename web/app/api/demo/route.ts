@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { GoogleEvent } from "@/lib/briefing/types";
 import { ProposalAction, LastChange } from "@/lib/store/types";
-import { prepareContext, summarize, isAffirmative, isNegative, isUndo } from "@/lib/conversation";
+import { prepareContext, summarize, summarizeProposal, isAffirmative, isNegative, isUndo } from "@/lib/conversation";
 import { askStanley } from "@/lib/stanley";
 import { extractProposal } from "@/lib/proposal";
 import { mockCalendarSource } from "@/lib/calendar-source";
@@ -70,7 +70,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Normal turn.
-    const { events: windowed, context } = prepareContext(events, message, now, DEMO_PROFILE);
+    const { events: windowed, byId, context } = prepareContext(events, message, now, DEMO_PROFILE);
     const reply = await askStanley(context, history);
     const action = await extractProposal({
       userMessage: message,
@@ -79,7 +79,14 @@ export async function POST(req: NextRequest) {
       candidateEvents: windowed,
       now,
     });
-    return NextResponse.json({ reply, events, pending: action ?? null });
+    return NextResponse.json({
+      reply,
+      events,
+      pending: action ?? null,
+      // Proposal-tense summary so the client can render an approval card
+      // without re-deriving titles from event ids.
+      pendingSummary: action ? summarizeProposal(action, byId) : null,
+    });
   } catch (e) {
     return NextResponse.json({ error: (e as Error).message }, { status: 500 });
   }

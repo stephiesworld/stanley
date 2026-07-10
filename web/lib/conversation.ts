@@ -25,7 +25,7 @@ const PROPOSAL_TTL_MIN = 30;
 // ── small helpers ────────────────────────────────────────────────────────────
 
 const AFFIRMATIVE = /^(y|yes|yeah|yep|yup|sure|ok|okay|do it|go|please do|approve(d)?|confirm(ed)?)\b/i;
-const NEGATIVE = /^(n|no|nope|nah|cancel|don'?t|stop that|leave it|never mind)\b/i;
+const NEGATIVE = /^(n|no|nope|nah|not quite|cancel|don'?t|stop that|leave it|never mind)\b/i;
 const YES_EMOJI = /^(👍|✅|🙏|👌)/u;
 const UNDO = /^(undo|put it back|revert|reverse that|take that back)\b/i;
 
@@ -79,6 +79,25 @@ export function summarize(action: ProposalAction, byId: Map<string, NormalizedEv
     return `cleared ${title}`;
   }
   return "done";
+}
+
+// The same action phrased as a proposal (for a card awaiting approval),
+// in the ledger's arrow idiom: "Dentist → Friday 9am."
+export function summarizeProposal(action: ProposalAction, byId: Map<string, NormalizedEvent>): string {
+  const when = (iso?: string) =>
+    iso ? `${weekdayName(dayKey(new Date(iso)))} ${friendlyTime(iso)}` : "";
+  if (action.type === "move") {
+    const title = byId.get(action.event_id ?? "")?.title ?? "That";
+    return `${title} → ${when(action.new_start)}.`;
+  }
+  if (action.type === "create") {
+    return `Hold ${when(action.new_start)} — “${action.title ?? "as discussed"}.”`;
+  }
+  if (action.type === "delete") {
+    const title = byId.get(action.event_id ?? "")?.title ?? "that";
+    return `Clear ${title}.`;
+  }
+  return "As discussed.";
 }
 
 interface TurnContext {
