@@ -41,21 +41,25 @@ message when one is given.
   "I've got the week from here" was rejected). NOT precise/spreadsheet-y,
   clipped, anxious/hovering, mock-formal, or a feelings-corrector.
 - Model: Codex-sonnet-4-6, max_tokens 1000, system prompt cached.
-- Visual brand (redesigned July 10, from Stephie's design handoff — spec kept
-  in `design/keeper-of-days/`): **"Keeper of Days"** — warm near-black
-  (`#0E0D0B`), hairlines (`#2A2721`), cream-white (`#F2EFE6`), signal accent
-  (`#FF4D2E`; approved alternates `#D8FF3E`/`#3E8BFF`/`#FFB13E`); Archivo 900
-  uppercase display + Space Mono for every label/ledger/chat line; no border
-  radius except chat bubbles, no shadows, everything hairlines and rectangles.
-  Concept: "a calendar is the only honest autobiography." Defined in
-  `web/app/keeper.css` (`.kd-*` landing, `.kdc-*` console). Revised July 10
-  per Stephie: big headings are **sentence case** (not all-caps), emphasis
-  words sit in a **1px accent box** (a lit cell — never the italic-accent-word
-  cliché), and copy runs a notch softer than the handoff (goodbye not funeral,
-  "keeps the week from getting the better of you", CTA "Give Stanley the week.
-  He'll give most of it back."). Labels/nav/buttons stay uppercase mono. The
-  old gentleman's-club tokens remain in `globals.css` only for the `/console`
-  voice tool.
+- Visual brand, landing (redesigned Sept 30, 2026): **"The shape of the
+  week"** — replaced the Keeper of Days landing because the giant
+  left-set headline read as templated/AI-made. The hero IS the product: a
+  sample week (6–12 Jul) where Wednesday's events physically tilt; "Say the
+  word" straightens the day, moves the dentist to Fri 9:00, turns the 1pm
+  sync into an email (`app/tipping-week.tsx`). Cool paper (`#EEF1F4`), white
+  panels, calendar tints per kind of event, Stanley blue (`#2A44D6`) for his
+  name/actions, amber (`#D9901A`) for tipping. Type: Epilogue for the
+  interface, **Newsreader italic only when Stanley speaks** (`.wk-voice`).
+  Headline is centered and modest; no eyebrows, no numbered sections, no
+  mono labels. Defined in `web/app/week.css` (`.wk-*`). Second section shows
+  learned preferences as beliefs with confidence bars (rise on yes, fade).
+- Visual brand, console: `/demo` uses the same look (Sept 30, 2026) and
+  the SAME week grid component as the landing (`web/app/week-grid.tsx`,
+  hour-scaled, lanes for overlaps, Wednesday tilts until p1 is approved).
+  Styles are `.wkc-*` in `week.css`. The old Keeper of Days stylesheet
+  (`keeper.css`, Archivo/Space Mono) is deleted; its spec stays in
+  `design/keeper-of-days/` for history. The old gentleman's-club tokens
+  remain in `globals.css` only for the `/console` voice tool.
 
 ## State (July 10, 2026)
 

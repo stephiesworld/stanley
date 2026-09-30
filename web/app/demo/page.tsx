@@ -2,8 +2,10 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import WeekGrid, { WeekLegend, type Block, type Kind } from "../week-grid";
 
-// The Stanley Console — from the "Keeper of Days" design handoff. A fixed
+// The Stanley Console, in the "shape of the week" look (same week grid as
+// the landing, see week-grid.tsx). A fixed
 // sample week (6–12 Jul 2026) rendered from a browser-owned mock calendar.
 // Two scripted proposals (SVC-0121/0122) carry the choreography; everything
 // typed into the murmur goes to the real Stanley brain at /api/demo, and any
@@ -56,28 +58,30 @@ const SEED_EVENTS: GEvent[] = [
   gev("ev-stag", "10", "20:00", "23:30", "Dan’s stag — you are the best man, act like it"),
 ];
 
-const TAGS: Record<string, string> = {
-  "ev-interview": "WORK",
-  "ev-therapy": "HEALTH",
-  "ev-dinner": "LOVE",
-  "ev-standup": "WORK",
-  "ev-design": "WORK",
-  "ev-sync1": "WORK",
-  "ev-sync2": "WORK",
-  "ev-dentist": "HEALTH",
-  "ev-mum": "FAMILY",
-  "ev-stag": "MATES",
+// Seed events by kind; anything Stanley adds through /api/demo is "stanley".
+const KINDS: Record<string, Kind> = {
+  "ev-interview": "work",
+  "ev-therapy": "health",
+  "ev-dinner": "people",
+  "ev-standup": "work",
+  "ev-design": "work",
+  "ev-sync1": "work",
+  "ev-sync2": "work",
+  "ev-dentist": "health",
+  "ev-mum": "family",
+  "ev-stag": "big",
 };
-const FLAGGED = new Set(["ev-dinner", "ev-dentist"]);
+// How Wednesday's pile leans while it's tipping: [deg, px].
+const TILTS: [number, number][] = [[-3, 0], [2.5, 3], [-1.5, 0], [3, -2], [-2.5, 4], [2, 0]];
 
 const DAY_META = [
-  { key: "2026-07-06", name: "MON" },
-  { key: "2026-07-07", name: "TUE" },
-  { key: "2026-07-08", name: "WED" },
-  { key: "2026-07-09", name: "THU", badge: "SACRED 18:00" },
-  { key: "2026-07-10", name: "FRI" },
-  { key: "2026-07-11", name: "SAT", badge: "EMPTIED", rest: "Recovery. Stanley insisted." },
-  { key: "2026-07-12", name: "SUN", badge: "PROTECTED", rest: "Nothing. Deliberately, gloriously nothing." },
+  { key: "2026-07-06", label: "Mon 6" },
+  { key: "2026-07-07", label: "Tue 7" },
+  { key: "2026-07-08", label: "Wed 8" },
+  { key: "2026-07-09", label: "Thu 9", tag: "Sacred 18:00" },
+  { key: "2026-07-10", label: "Fri 10" },
+  { key: "2026-07-11", label: "Sat 11", tag: "Emptied", rest: "Recovery. Stanley insisted." },
+  { key: "2026-07-12", label: "Sun 12", tag: "Protected", rest: "Nothing. Deliberately." },
 ];
 
 const BASE_LOG: LogEntry[] = [
@@ -95,8 +99,9 @@ const SEED_MSGS: Msg[] = [
 function dayOf(e: GEvent): string {
   return e.start?.date ?? e.start?.dateTime?.slice(0, 10) ?? "";
 }
-function timeOf(e: GEvent): string {
-  return e.start?.dateTime ? e.start.dateTime.slice(11, 16) : "—";
+function hourOf(t?: { dateTime?: string | null } | null): number | null {
+  const hm = t?.dateTime?.slice(11, 16);
+  return hm ? Number(hm.slice(0, 2)) + Number(hm.slice(3)) / 60 : null;
 }
 function sig(e: GEvent): string {
   return `${e.start?.dateTime ?? e.start?.date}|${e.summary}`;
@@ -109,6 +114,7 @@ export default function Console() {
   const [p2, setP2] = useState<ScriptState>("hidden");
   const [events, setEvents] = useState<GEvent[]>(SEED_EVENTS);
   const [struck, setStruck] = useState<Set<string>>(new Set());
+  const [moved, setMoved] = useState<Set<string>>(new Set());
   const [messages, setMessages] = useState<Msg[]>(SEED_MSGS);
   const [extraLog, setExtraLog] = useState<LogEntry[]>([]);
   const [apiPending, setApiPending] = useState<ApiPending | null>(null);
@@ -144,6 +150,7 @@ export default function Console() {
       }),
     );
     setStruck((s) => new Set(s).add("ev-sync1"));
+    setMoved((s) => new Set(s).add("ev-dentist"));
     setP1("approved");
     setTimeout(() => {
       say("Also — your anniversary is in 9 days. Might I hold next Friday evening before someone else claims it?");
@@ -152,7 +159,7 @@ export default function Console() {
   };
   const correctP1 = () => {
     say("not quite", "you");
-    say("Understood — I’ve left Wednesday untouched and made a note: you like your chaos artisanal. My proposals will adjust.");
+    say("Understood. I’ve left Wednesday untouched and made a note: you like your chaos artisanal. My proposals will adjust.");
     setP1("corrected");
     setP2("pending");
   };
@@ -230,188 +237,137 @@ export default function Console() {
   const approvals = serviceLog.filter((l) => l.status === "APPROVED").length;
   const corrections = serviceLog.filter((l) => l.status === "CORRECTED").length;
 
-  const byDay = new Map<string, GEvent[]>();
-  for (const e of events) {
-    const d = dayOf(e);
-    if (!byDay.has(d)) byDay.set(d, []);
-    byDay.get(d)!.push(e);
-  }
-  for (const list of byDay.values())
-    list.sort((a, b) => (a.start?.dateTime ?? a.start?.date ?? "").localeCompare(b.start?.dateTime ?? b.start?.date ?? ""));
+  const blocks: Block[] = [];
+  DAY_META.forEach((day, d) => {
+    const evs = events
+      .filter((e) => dayOf(e) === day.key)
+      .sort((a, b) => (a.start?.dateTime ?? "").localeCompare(b.start?.dateTime ?? ""));
+    evs.forEach((e, i) => {
+      const start = hourOf(e.start) ?? 8; // all-day events sit at the top
+      const end = hourOf(e.end);
+      const kind = KINDS[e.id ?? ""] ?? "stanley";
+      blocks.push({
+        key: `${e.id}:${sig(e)}`,
+        day: d,
+        start,
+        // floor at 45 min so a 15-minute stand-up is still legible
+        len: end !== null && end > start ? Math.max(end - start, 0.75) : 1,
+        title: e.summary ?? "",
+        sub: end !== null && end - start < 1 ? undefined : e.start?.dateTime ? e.start.dateTime.slice(11, 16) : "all day",
+        kind,
+        tilt: d === 2 && !p1Done ? TILTS[i % TILTS.length] : undefined,
+        moved: !!e.id && moved.has(e.id),
+        gone: !!e.id && struck.has(e.id),
+      });
+    });
+    if (evs.length === 0 && day.rest)
+      blocks.push({ key: `rest-${d}`, day: d, start: 8, len: 16, title: day.rest, kind: "held" });
+  });
+  const days = DAY_META.map((day, d) =>
+    d === 2 ? { label: day.label, tag: p1Done ? "Breathing" : "Tipping", warn: true } : day,
+  );
+
+  const proposal = (id: string, text: string, yes: () => void, no: () => void) => (
+    <div className="wkc-proposal">
+      <span className="label">Proposal · {id}</span>
+      <span className="text">{text}</span>
+      <div className="wk-btns">
+        <button className="yes" onClick={yes}>Say the word</button>
+        <button onClick={no}>Not quite</button>
+      </div>
+    </div>
+  );
 
   return (
-    <div className="kd kdc">
-      {/* top bar */}
-      <div className="kdc-top">
-        <Link href="/" className="kdc-top-brand">
-          <div className="kdc-top-sq" />
-          <span style={{ fontWeight: 700 }}>STANLEY</span>
-          <span style={{ color: "var(--kd-dim)" }}>/ THE CONSOLE</span>
+    <div className={`wk wkc ${p1Done ? "wk-calm" : "wk-tipping"}`}>
+      <header className="wkc-top">
+        <Link href="/" className="wk-logo">
+          <i aria-hidden="true">
+            <b /><b /><b /><b /><b /><b /><b />
+          </i>
+          Stanley
         </Link>
-        <div className="kdc-top-right">
-          <span>WEEK OF 6 JUL 2026</span>
-          <span className="kdc-status">
-            <span className="kdc-dot" />
-            <span className={p1Done ? "breathing" : "tipping"}>
-              {p1Done ? "THE WEEK IS BREATHING" : "THE WEEK IS TIPPING"}
-            </span>
-          </span>
+        <div className="wkc-tabs" role="tablist">
+          <button role="tab" aria-selected={view === "week"} onClick={() => setView("week")}>The week</button>
+          <button role="tab" aria-selected={view === "log"} onClick={() => setView("log")}>Service log</button>
         </div>
-      </div>
+        <div className="wk-status">
+          <i />
+          <span>Week of 6 July · {p1Done ? "The week is breathing" : "Wednesday is tipping"}</span>
+        </div>
+      </header>
 
-      <div className="kdc-main">
-        {/* left rail */}
-        <div className="kdc-rail">
-          <button className={`kdc-nav-item ${view === "week" ? "active" : ""}`} onClick={() => setView("week")}>
-            THE WEEK
-          </button>
-          <button className={`kdc-nav-item ${view === "log" ? "active" : ""}`} onClick={() => setView("log")}>
-            SERVICE LOG
-          </button>
-          <div className="kdc-rail-space" />
-          <div className="kdc-stats">
-            <span>
-              LEANINGS LEARNED
-              <br />
-              <span className="kdc-stat-n">{12 + approvals}</span>
-            </span>
-            <br />
-            <span>
-              CORRECTIONS TAKEN
-              <br />
-              <span className="kdc-stat-n accent">{corrections}</span>
-            </span>
+      <div className="wkc-main">
+        <main className="wkc-center">
+          <div className="wkc-head">
+            <h1>{view === "week" ? "The week" : "Service log"}</h1>
+            <p>
+              {12 + approvals} preferences learned · {corrections} {corrections === 1 ? "correction" : "corrections"} taken
+            </p>
           </div>
-        </div>
-
-        {/* center */}
-        <div className="kdc-center">
           {view === "week" ? (
             <>
-              <div className="kdc-center-head">
-                <h1>The week</h1>
-                <span className="sub">HE READS. HE PROPOSES. YOU DECIDE.</span>
-              </div>
-              <div className="kdc-week">
-                {DAY_META.map((day) => {
-                  const isWed = day.name === "WED";
-                  const badge = isWed ? (p1Done ? "BREATHING" : "TIPPING") : (day.badge ?? "");
-                  const badgeCls = isWed ? (p1Done ? "calm" : "accent") : "";
-                  const evs = byDay.get(day.key) ?? [];
-                  return (
-                    <div key={day.name} className={`kdc-day ${isWed && !p1Done ? "tipping" : ""}`}>
-                      <div className="kdc-day-head">
-                        <span className="kdc-day-name">{day.name}</span>
-                        <span className={`kdc-day-badge ${badgeCls}`}>{badge}</span>
-                      </div>
-                      {evs.map((e) => (
-                        <div
-                          key={`${e.id}:${sig(e)}`}
-                          className={`kdc-ev ${e.id && FLAGGED.has(e.id) ? "flagged" : ""} ${e.id && struck.has(e.id) ? "struck" : ""}`}
-                        >
-                          <span className="t">{timeOf(e)}</span>
-                          <span className="name">{e.summary}</span>
-                          <span className="tag">{TAGS[e.id ?? ""] ?? "HELD"}</span>
-                        </div>
-                      ))}
-                      {evs.length === 0 && day.rest && (
-                        <div className="kdc-ev rest">
-                          <span className="t">—</span>
-                          <span className="name">{day.rest}</span>
-                          <span className="tag">REST</span>
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
+              <WeekGrid days={days} blocks={blocks} from={8} to={24} hour={34} tipDay={2} />
+              <WeekLegend />
             </>
           ) : (
-            <>
-              <div className="kdc-center-head">
-                <h1>Service log</h1>
-                <span className="sub">THE CURRICULUM</span>
-              </div>
-              <div className="kdc-log">
-                {serviceLog.map((log) => (
-                  <div className="kdc-log-row" key={log.id}>
-                    <span className="kdc-log-id">{log.id}</span>
-                    <span className="kdc-log-body">
-                      <span className="k">OBSERVED&nbsp;&nbsp;</span>
-                      {log.observed}
-                      <br />
-                      <span className="k">PROPOSED&nbsp;&nbsp;</span>
-                      <span className="prop">{log.proposed}</span>
-                    </span>
-                    <span className={`kdc-log-status ${log.status.toLowerCase()}`}>{log.status}</span>
+            <div className="wkc-log">
+              {serviceLog.map((log) => (
+                <div className="wkc-log-row" key={log.id}>
+                  <span className="wkc-log-id">{log.id}</span>
+                  <div className="wkc-log-body">
+                    <p><span className="k">Noticed</span>{log.observed}</p>
+                    <p><span className="k">Proposed</span>{log.proposed}</p>
                   </div>
-                ))}
-              </div>
-            </>
+                  <span className={`wkc-pill ${log.status.toLowerCase()}`}>
+                    {log.status.charAt(0) + log.status.slice(1).toLowerCase()}
+                  </span>
+                </div>
+              ))}
+            </div>
           )}
-        </div>
+        </main>
 
-        {/* the murmur */}
-        <div className="kdc-murmur">
-          <div className="kdc-murmur-head">
-            <span>THE MURMUR</span>
-            <span className="live">STANLEY IS READING</span>
+        <aside className="wkc-chat">
+          <div className="wkc-chat-head">
+            <span className="wk-who">Stanley</span>
+            <span>reading your week</span>
           </div>
-          <div className="kdc-thread" ref={threadRef}>
+          <div className="wkc-thread" ref={threadRef} aria-live="polite">
             {messages.map((m, i) => (
-              <div key={i} className={`kdc-msg ${m.who}`}>
+              <div key={i} className={`wkc-msg ${m.who}${m.who === "stanley" ? " wk-voice" : ""}`}>
                 {m.text}
               </div>
             ))}
-            {loading && <div className="kdc-msg stanley">…</div>}
-            {p1 === "pending" && (
-              <div className="kdc-proposal">
-                <span className="label">PROPOSAL · SVC-0121</span>
-                <span className="text">Dentist → Friday 9am. The 1pm sync becomes an email. Nothing moves without your word.</span>
-                <div className="btns">
-                  <button className="kdc-approve" onClick={approveP1}>SAY THE WORD</button>
-                  <button className="kdc-correct" onClick={correctP1}>NOT QUITE</button>
-                </div>
-              </div>
-            )}
-            {p2 === "pending" && (
-              <div className="kdc-proposal">
-                <span className="label">PROPOSAL · SVC-0122</span>
-                <span className="text">Hold next Friday 7pm onward — “anniversary, do not book, do not ask.” I have restaurant thoughts, when you’re ready.</span>
-                <div className="btns">
-                  <button className="kdc-approve" onClick={approveP2}>SAY THE WORD</button>
-                  <button className="kdc-correct" onClick={correctP2}>NOT QUITE</button>
-                </div>
-              </div>
-            )}
-            {apiPending && !loading && (
-              <div className="kdc-proposal">
-                <span className="label">PROPOSAL · {apiPending.svcId}</span>
-                <span className="text">{apiPending.summary} Nothing moves without your word.</span>
-                <div className="btns">
-                  <button className="kdc-approve" onClick={() => send("yes please")}>SAY THE WORD</button>
-                  <button className="kdc-correct" onClick={() => send("not quite")}>NOT QUITE</button>
-                </div>
-              </div>
-            )}
+            {loading && <div className="wkc-msg stanley wkc-typing">…</div>}
+            {p1 === "pending" &&
+              proposal("SVC-0121", "Dentist to Friday 9am. The 1pm sync becomes an email. Nothing moves without your word.", approveP1, correctP1)}
+            {p2 === "pending" &&
+              proposal("SVC-0122", "Hold next Friday from 7pm: anniversary, do not book, do not ask. I have restaurant thoughts, when you’re ready.", approveP2, correctP2)}
+            {apiPending && !loading &&
+              proposal(apiPending.svcId, `${apiPending.summary} Nothing moves without your word.`, () => send("yes please"), () => send("not quite"))}
           </div>
-          {error && <div className="kdc-error">{error} — do try again.</div>}
-          <div className="kdc-composer">
+          {error && <div className="wkc-error">{error}. Do try again.</div>}
+          <form
+            className="wkc-composer"
+            onSubmit={(e) => {
+              e.preventDefault();
+              send(draft);
+            }}
+          >
             <input
-              className="kdc-input"
+              className="wkc-input"
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") send(draft);
-              }}
-              placeholder="a word in his ear…"
+              placeholder="A word in his ear…"
+              aria-label="Message Stanley"
               disabled={loading}
             />
-            <button className="kdc-send" onClick={() => send(draft)} disabled={loading || !draft.trim()}>
+            <button className="wkc-send" type="submit" disabled={loading || !draft.trim()} aria-label="Send">
               →
             </button>
-          </div>
-        </div>
+          </form>
+        </aside>
       </div>
     </div>
   );

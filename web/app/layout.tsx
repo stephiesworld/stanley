@@ -1,22 +1,22 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { Archivo, Fraunces, Space_Mono } from "next/font/google";
+import { Epilogue, Fraunces, Newsreader } from "next/font/google";
 import "./globals.css";
-import "./keeper.css";
+import "./week.css";
 
-// Keeper of Days brand: Archivo 900 display + Space Mono for every label,
-// ledger row, and chat line. Fraunces stays loaded for the /console voice
-// tool, which keeps the old stylesheet.
-const archivo = Archivo({
+// "The shape of the week" (landing + /demo console): Epilogue for the
+// interface, Newsreader italic whenever Stanley speaks. Fraunces stays loaded
+// for the /console voice tool, which keeps the old stylesheet.
+const epilogue = Epilogue({
   subsets: ["latin"],
-  variable: "--font-archivo",
-  style: ["normal", "italic"],
+  variable: "--font-epilogue",
+  weight: ["400", "500", "600", "800"],
 });
-const spaceMono = Space_Mono({
+const newsreader = Newsreader({
   subsets: ["latin"],
-  variable: "--font-space-mono",
-  weight: ["400", "700"],
-  style: ["normal", "italic"],
+  variable: "--font-newsreader",
+  style: ["italic"],
+  weight: ["400", "500"],
 });
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -27,18 +27,18 @@ const fraunces = Fraunces({
 
 export const metadata: Metadata = {
   metadataBase: new URL(process.env.APP_BASE_URL ?? "http://localhost:3000"),
-  title: "Stanley — Keeper of Days",
+  title: "Stanley",
   description:
-    "A calendar is the only honest autobiography. Stanley reads yours, learns the person it describes, and politely keeps the week from getting the better of you.",
+    "Stanley protects the shape of your week. He reads your calendar, spots the day that's about to go wrong, and proposes a fix. Nothing moves until you say yes.",
   openGraph: {
-    title: "Stanley — Keeper of Days",
-    description: "A calendar is the only honest autobiography.",
+    title: "Stanley",
+    description: "Stanley protects the shape of your week.",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Stanley — Keeper of Days",
-    description: "A calendar is the only honest autobiography.",
+    title: "Stanley",
+    description: "Stanley protects the shape of your week.",
   },
 };
 
@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${archivo.variable} ${spaceMono.variable} ${fraunces.variable}`}
+      className={`${epilogue.variable} ${newsreader.variable} ${fraunces.variable}`}
       data-theme="dark"
       suppressHydrationWarning
     >
