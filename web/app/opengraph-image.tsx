@@ -37,7 +37,7 @@ export default function OpengraphImage() {
         <div style={{ display: "flex", flexDirection: "column", width: "480px", gap: "28px" }}>
           <div style={{ fontSize: "30px", fontWeight: 700 }}>Stanley</div>
           <div style={{ fontSize: "72px", fontWeight: 800, lineHeight: 1.02, letterSpacing: "-3px" }}>
-            Protects the shape of your week.
+            Protects the shape of your week
           </div>
           <div style={{ fontSize: "26px", color: "#5B6370" }}>Nothing moves until you say yes.</div>
         </div>

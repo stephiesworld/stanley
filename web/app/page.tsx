@@ -62,7 +62,7 @@ export default function Landing() {
 
         <section className="wk-end" id="start">
           <div>
-            <h2>$20 a month. Your week, in better shape.</h2>
+            <h2>$20 a month. Your week, in better shape</h2>
             <p>Reads your Google Calendar. Texts you on Telegram. Never changes anything without a yes.</p>
           </div>
           <Link href="/demo" className="wk-btn">Try the demo</Link>

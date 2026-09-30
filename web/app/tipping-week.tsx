@@ -85,7 +85,7 @@ export default function TippingWeek() {
           <i />
           <span>Week of 6 July · {calm ? "The week is breathing" : "Wednesday is tipping"}</span>
         </div>
-        <h1>Stanley protects the shape of your week.</h1>
+        <h1>Stanley protects the shape of your week</h1>
         <p>
           He reads your calendar, spots the day that’s about to go wrong, and proposes a fix.
           Nothing moves until you say yes.
